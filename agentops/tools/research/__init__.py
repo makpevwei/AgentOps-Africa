@@ -1,7 +1,5 @@
-from agentops.tools.research.base import BaseResearchTool
-from agentops.tools.research.research_result import ResearchResult
+"""
+Research Tools Package
 
-__all__ = [
-    "BaseResearchTool",
-    "ResearchResult",
-]
+Contains all research-related integrations.
+"""

@@ -39,9 +39,17 @@ class Settings(BaseSettings):
     # LLM CONFIGURATION
     # ==========================================================================
 
+    # LLM_PROVIDER: str = Field(default="groq")
+    
     LLM_PROVIDER: str = Field(default="openai")
 
-    DEFAULT_MODEL: str = Field(default="gpt-4o-mini")
+    OPENAI_MODEL: str = Field(default="gpt-4o-mini")
+
+    GROQ_MODEL: str = Field(default="llama-3.3-70b-versatile")
+
+    GEMINI_MODEL: str = Field(default="gemini-2.5-pro")
+
+    OPENROUTER_MODEL: str = Field(default="openai/gpt-4.1")
 
     TEMPERATURE: float = Field(default=0.0)
 
@@ -146,3 +154,4 @@ class Settings(BaseSettings):
 # ==============================================================================
 
 settings = Settings()
+

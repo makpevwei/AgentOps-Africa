@@ -1,4 +1,4 @@
-from agentops.tools.research import ResearchResult
+from agentops.domains.research.models import ResearchResult
 
 
 def main():

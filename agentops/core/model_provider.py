@@ -44,6 +44,20 @@ class ChatModelProvider:
     def create():
 
         provider = settings.LLM_PROVIDER.lower()
+        
+        if provider == LLMProvider.OPENAI:
+            model_name = settings.OPENAI_MODEL
+        elif provider == LLMProvider.GROQ:
+            model_name = settings.GROQ_MODEL
+        elif provider == LLMProvider.GEMINI:
+            model_name = settings.GEMINI_MODEL
+        elif provider == LLMProvider.OPENROUTER:
+            model_name = settings.OPENROUTER_MODEL
+        else:
+            model_name = "Unknown"
+
+        logger.info(f"Initializing LLM Provider : {provider}")
+        logger.info(f"Using Model              : {model_name}")
 
         logger.info(f"Initializing LLM Provider: {provider}")
 
@@ -54,11 +68,12 @@ class ChatModelProvider:
         if provider == LLMProvider.OPENAI:
 
             return ChatOpenAI(
-                model=settings.DEFAULT_MODEL,
+                model=settings.OPENAI_MODEL,
                 temperature=settings.TEMPERATURE,
                 timeout=settings.REQUEST_TIMEOUT,
                 streaming=settings.STREAMING,
-            )
+                max_retries=5,
+        )
 
         # ============================================================
         # Gemini
@@ -67,9 +82,9 @@ class ChatModelProvider:
         elif provider == LLMProvider.GEMINI:
 
             return ChatGoogleGenerativeAI(
-                model=settings.DEFAULT_MODEL,
+                model=settings.GEMINI_MODEL,
                 temperature=settings.TEMPERATURE,
-            )
+)   
 
         # ============================================================
         # Groq
@@ -78,9 +93,9 @@ class ChatModelProvider:
         elif provider == LLMProvider.GROQ:
 
             return ChatGroq(
-                model=settings.DEFAULT_MODEL,
+                model=settings.GROQ_MODEL,
                 temperature=settings.TEMPERATURE,
-            )
+        )
 
         # ============================================================
         # OpenRouter
@@ -88,14 +103,14 @@ class ChatModelProvider:
 
         elif provider == LLMProvider.OPENROUTER:
 
-            return ChatOpenAI(
-                api_key=settings.OPENROUTER_API_KEY,
-                base_url=settings.OPENROUTER_BASE_URL,
-                model=settings.DEFAULT_MODEL,
-                temperature=settings.TEMPERATURE,
-                timeout=settings.REQUEST_TIMEOUT,
-                streaming=settings.STREAMING,
-            )
+                return ChatOpenAI(
+                    api_key=settings.OPENROUTER_API_KEY,
+                    base_url=settings.OPENROUTER_BASE_URL,
+                    model=settings.OPENROUTER_MODEL,
+                    temperature=settings.TEMPERATURE,
+                    timeout=settings.REQUEST_TIMEOUT,
+                    streaming=settings.STREAMING,
+)
 
         # ============================================================
         # Unsupported
