@@ -1,6 +1,6 @@
 from pathlib import Path
 
-from agentops.core.agent_builder import AgentBuilder
+from agentops.builders.agent_builder import AgentBuilder
 from agentops.tools.research.langchain_tools import tavily_search
 
 
