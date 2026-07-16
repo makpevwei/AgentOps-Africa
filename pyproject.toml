@@ -1,0 +1,5 @@
+[project]
+name = "agentops-africa"
+version = "0.1.0"
+description = "Enterprise AI Executive Assistant"
+requires-python = ">=3.12"

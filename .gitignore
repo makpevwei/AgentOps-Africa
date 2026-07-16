@@ -1,0 +1,27 @@
+# Virtual Environment
+.venv/
+
+# Environment
+.env
+
+# Google OAuth
+credentials.json
+token.json
+token.pickle
+
+# Logs
+logs/
+
+# Python
+__pycache__/
+*.pyc
+
+# VSCode
+.vscode/
+
+# Streamlit
+.streamlit/secrets.toml
+
+# OS
+.DS_Store
+Thumbs.db
