@@ -8,7 +8,7 @@ provider and returns a complete FinanceSnapshot.
 """
 
 from agentops.domains.research.finance_snapshot import FinanceSnapshot
-from agentops.domains.research.models import CompanyProfile
+from agentops.domains.companies.models import CompanyProfile
 from agentops.providers.finance.provider_factory import FinanceProviderFactory
 
 

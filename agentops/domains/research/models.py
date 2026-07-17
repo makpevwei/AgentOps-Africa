@@ -32,28 +32,6 @@ class ResearchResult(BaseModel):
     metadata: dict[str, Any] = Field(default_factory=dict)
 
 
-class CompanyProfile(BaseModel):
-    """
-    Standard representation of a company.
-    """
-
-    company_name: str
-
-    aliases: list[str] = Field(default_factory=list)
-
-    ticker: str | None = None
-
-    exchange: str | None = None
-
-    country: str | None = None
-
-    industry: str | None = None
-
-    sector: str | None = None
-
-    website: str | None = None
-
-
 class ResearchReport(BaseModel):
     """
     Final research report produced by the engine.

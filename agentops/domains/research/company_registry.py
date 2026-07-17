@@ -16,7 +16,7 @@ Eventually:
 import json
 from pathlib import Path
 
-from agentops.domains.research.models import CompanyProfile
+from agentops.domains.companies.models import CompanyProfile
 
 
 class CompanyRegistry:

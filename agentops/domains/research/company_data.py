@@ -7,7 +7,7 @@ No business logic should exist here.
 Only company data.
 """
 
-from agentops.domains.research.models import CompanyProfile
+from agentops.domains.companies.models import CompanyProfile
 
 
 COMPANIES = {

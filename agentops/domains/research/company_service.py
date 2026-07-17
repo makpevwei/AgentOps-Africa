@@ -16,7 +16,7 @@ from agentops.domains.research.company_discovery import CompanyDiscovery
 from agentops.domains.research.company_normalizer import CompanyNormalizer
 from agentops.domains.research.company_registry import CompanyRegistry
 from agentops.domains.research.company_resolver import CompanyResolver
-from agentops.domains.research.models import CompanyProfile
+from agentops.domains.companies.models import CompanyProfile
 
 
 class CompanyService:

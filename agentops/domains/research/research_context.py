@@ -11,7 +11,7 @@ Report Builders.
 from pydantic import BaseModel, Field
 
 from agentops.domains.research.finance_snapshot import FinanceSnapshot
-from agentops.domains.research.models import CompanyProfile
+from agentops.domains.companies.models import CompanyProfile
 
 
 class ResearchContext(BaseModel):

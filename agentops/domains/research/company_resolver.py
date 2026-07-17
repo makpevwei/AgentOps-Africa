@@ -21,7 +21,7 @@ from rapidfuzz import fuzz, process
 
 from agentops.domains.research.company_data import COMPANIES
 from agentops.domains.research.company_registry import CompanyRegistry
-from agentops.domains.research.models import CompanyProfile
+from agentops.domains.companies.models import CompanyProfile
 
 
 class CompanyResolver:

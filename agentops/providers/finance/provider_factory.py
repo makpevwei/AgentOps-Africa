@@ -5,7 +5,7 @@ Selects the most appropriate finance provider
 for a company based on its profile.
 """
 
-from agentops.domains.research.models import CompanyProfile
+from agentops.domains.companies.models import CompanyProfile
 from agentops.providers.finance.base_provider import BaseFinanceProvider
 from agentops.providers.finance.ngx_provider import NgxFinanceProvider
 from agentops.providers.finance.private_provider import PrivateCompanyProvider

@@ -8,10 +8,8 @@ findings into a structured CompanyProfile.
 from langchain_core.messages import HumanMessage
 
 from agentops.providers.model_provider import ChatModelProvider
-from agentops.domains.research.models import (
-    CompanyProfile,
-    ResearchResult,
-)
+from agentops.domains.companies.models import CompanyProfile
+from agentops.domains.research.models import ResearchResult
 
 
 class CompanyNormalizer:
