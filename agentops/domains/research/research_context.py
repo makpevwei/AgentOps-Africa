@@ -10,7 +10,7 @@ Report Builders.
 
 from pydantic import BaseModel, Field
 
-from agentops.domains.research.finance_snapshot import FinanceSnapshot
+from agentops.domains.finance.finance_snapshot import FinanceSnapshot
 from agentops.domains.companies.models import CompanyProfile
 
 

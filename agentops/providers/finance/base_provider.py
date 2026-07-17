@@ -7,8 +7,7 @@ must implement.
 """
 
 from abc import ABC, abstractmethod
-
-from agentops.domains.research.finance_snapshot import FinanceSnapshot
+from agentops.domains.finance.finance_snapshot import FinanceSnapshot
 from agentops.domains.companies.models import CompanyProfile
 
 

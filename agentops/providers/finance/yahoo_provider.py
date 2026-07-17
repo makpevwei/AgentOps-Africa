@@ -13,7 +13,7 @@ from agentops.domains.finance.finance_models import (
     PriceHistoryPoint,
     StockQuote,
 )
-from agentops.domains.research.finance_snapshot import FinanceSnapshot
+from agentops.domains.finance.finance_snapshot import FinanceSnapshot
 from agentops.domains.companies.models import CompanyProfile
 from agentops.providers.finance.base_provider import BaseFinanceProvider
 
