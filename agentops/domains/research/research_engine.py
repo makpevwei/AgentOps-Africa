@@ -5,7 +5,7 @@ Builds a complete research context for a company.
 """
 
 from agentops.domains.companies.company_service import CompanyService
-from agentops.domains.research.finance_service import FinanceService
+from agentops.domains.finance.finance_service import FinanceService
 from agentops.domains.research.research_context import ResearchContext
 
 
