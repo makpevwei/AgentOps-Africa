@@ -7,7 +7,7 @@ data provider during a single request.
 
 from pydantic import BaseModel, Field
 
-from agentops.domains.research.finance_models import (
+from agentops.domains.finance.finance_models  import (
     CompanyFundamentals,
     PriceHistoryPoint,
     StockQuote,

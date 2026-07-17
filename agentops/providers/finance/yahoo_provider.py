@@ -8,7 +8,7 @@ Yahoo Finance in a single provider session.
 from datetime import datetime
 
 from agentops.clients.yahoo_client import YahooClient
-from agentops.domains.research.finance_models import (
+from agentops.domains.finance.finance_models import (
     CompanyFundamentals,
     PriceHistoryPoint,
     StockQuote,
