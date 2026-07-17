@@ -19,7 +19,7 @@ It NEVER:
 
 from rapidfuzz import fuzz, process
 
-from agentops.domains.research.company_data import COMPANIES
+from agentops.domains.companies.company_data import COMPANIES
 from agentops.domains.companies.company_registry import CompanyRegistry
 from agentops.domains.companies.models import CompanyProfile
 
