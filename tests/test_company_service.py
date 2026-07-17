@@ -1,4 +1,4 @@
-from agentops.domains.research.company_service import CompanyService
+from agentops.domains.companies.company_service import CompanyService
 
 
 def main():
