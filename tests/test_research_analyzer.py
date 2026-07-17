@@ -36,15 +36,49 @@ def test_company(name: str):
     print("\nExecutive Summary:")
     print(report.executive_summary)
 
-    print("\nRecommendation:")
-    print(report.recommendation)
+    print("\nBusiness Overview:")
+    print(report.business.overview)
 
-    print("\nConfidence:")
-    print(report.confidence)
+    print("\nIndustry:")
+    print(report.business.industry)
+
+    print("\nBusiness Model:")
+    print(report.business.business_model)
+
+    print("\nRecommendation:")
+    print(report.recommendation.action)
+
+    print("\nRecommendation Rationale:")
+    print(report.recommendation.rationale)
+
+    print("\nRecommendation Confidence:")
+    print(report.recommendation.confidence)
+
+    print("\nOverall Risk:")
+    print(report.risks.overall_risk)
+
+    print("\nFinancial Risk:")
+    print(report.risks.financial_risk)
+
+    print("\nSWOT Analysis")
+
+    print("\nStrengths:")
+    for strength in report.swot.strengths:
+        print(f"  • {strength}")
+
+    print("\nWeaknesses:")
+    for weakness in report.swot.weaknesses:
+        print(f"  • {weakness}")
+
+    print("\nOpportunities:")
+    for opportunity in report.swot.opportunities:
+        print(f"  • {opportunity}")
+
+    print("\nThreats:")
+    for threat in report.swot.threats:
+        print(f"  • {threat}")
 
     print("\nSections:")
-    print(len(report.sections))
-
     for section in report.sections:
         print(f"  • {section.title}")
 

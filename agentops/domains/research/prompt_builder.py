@@ -1,7 +1,7 @@
 """
 Research Prompt Builder
 
-Builds prompts for the Research Analyzer.
+Builds prompts for the Enterprise Research Analyzer.
 """
 
 from agentops.domains.research.research_context import ResearchContext
@@ -9,8 +9,8 @@ from agentops.domains.research.research_context import ResearchContext
 
 class ResearchPromptBuilder:
     """
-    Converts a ResearchContext into a prompt
-    suitable for LLM analysis.
+    Converts a ResearchContext into an enterprise
+    research prompt.
     """
 
     @staticmethod
@@ -24,76 +24,128 @@ class ResearchPromptBuilder:
         quote = finance.quote if finance else None
         fundamentals = finance.fundamentals if finance else None
 
+        price = quote.price if quote else "N/A"
+        market_cap = quote.market_cap if quote else "N/A"
+
+        description = (
+            fundamentals.description
+            if fundamentals and fundamentals.description
+            else "N/A"
+        )
+
         prompt = f"""
-You are a senior financial research analyst.
+You are a Senior Equity Research Analyst working for a global investment firm.
 
-Analyze the following company and produce a structured investment research report.
+Your task is to produce a professional institutional-quality research report.
 
-Company:
-{company.company_name}
+Use the information below.
 
-Country:
-{company.country}
+====================================================
+COMPANY INFORMATION
+====================================================
 
-Industry:
-{company.industry}
+Company: {company.company_name}
 
-Ticker:
-{company.ticker}
+Country: {company.country}
 
-Current Price:
-{quote.price if quote else "N/A"}
+Industry: {company.industry}
 
-Market Cap:
-{quote.market_cap if quote else "N/A"}
+Exchange: {company.exchange or "Private"}
+
+Ticker: {company.ticker or "N/A"}
+
+Current Price: {price}
+
+Market Capitalization: {market_cap}
 
 Business Description:
-{fundamentals.description if fundamentals else "N/A"}
+{description}
 
-The report should include:
+====================================================
+INSTRUCTIONS
+====================================================
 
-1. Executive Summary
-2. Business Overview
-3. Industry Position
-4. Strengths
-5. Risks
-6. Opportunities
-7. Recommendation
-8. Confidence Score
+Perform a professional business and investment analysis.
 
-Respond ONLY with valid JSON.
+Use sound financial reasoning.
 
-The JSON MUST match this schema exactly:
+If information is unavailable, make reasonable professional assumptions and clearly state them.
+
+Return ONLY valid JSON.
+
+Do NOT include markdown.
+
+Do NOT wrap the response inside ```json.
+
+Do NOT explain your reasoning.
+
+====================================================
+JSON STRUCTURE
+====================================================
 
 {{
-  "company": "...",
-  "executive_summary": "...",
-  "recommendation": "...",
-  "confidence": 0.95,
+  "company": "string",
+
+  "executive_summary": "string",
+
+  "business": {{
+    "overview": "string",
+    "industry": "string",
+    "headquarters": "string",
+    "business_model": "string"
+  }},
+
+  "swot": {{
+    "strengths": [
+      "string"
+    ],
+    "weaknesses": [
+      "string"
+    ],
+    "opportunities": [
+      "string"
+    ],
+    "threats": [
+      "string"
+    ]
+  }},
+
+  "risks": {{
+    "overall_risk": "Low | Medium | High",
+    "financial_risk": "string",
+    "operational_risk": "string",
+    "regulatory_risk": "string",
+    "confidence": 0.90
+  }},
+
+  "recommendation": {{
+    "action": "Strong Buy | Buy | Hold | Sell | Strong Sell",
+    "rationale": "string",
+    "investment_horizon": "Short Term | Medium Term | Long Term",
+    "confidence": 0.90
+  }},
+
   "sections": [
     {{
-      "title": "...",
-      "content": "...",
+      "title": "string",
+      "summary": "string",
       "findings": [
         {{
-          "title": "...",
-          "summary": "...",
-          "confidence": 0.95,
-          "sources": []
+          "title": "string",
+          "summary": "string",
+          "confidence": 0.90,
+          "sources": [
+            "string"
+          ]
         }}
       ]
     }}
   ],
+
   "metadata": {{}}
 }}
 
-Rules:
-- Return ONLY valid JSON.
-- Do NOT include markdown.
-- Do NOT wrap the JSON in ```json fences.
-- Do NOT add explanations.
-- Ensure all required fields are present.
-- Ensure confidence is a number between 0 and 1.
+The JSON MUST conform exactly to this structure.
 """
 
         return prompt.strip()
