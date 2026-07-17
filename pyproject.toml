@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 
 dependencies = [
     "deepagents",
+    "fastapi>=0.139.2",
     "google-api-python-client",
     "google-auth",
     "google-auth-httplib2",
@@ -27,6 +28,7 @@ dependencies = [
     "rich",
     "streamlit",
     "tavily-python",
+    "uvicorn>=0.51.0",
     "wikipedia",
     "yfinance",
 ]
