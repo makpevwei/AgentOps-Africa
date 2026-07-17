@@ -1,5 +1,3 @@
-from typing import List
-
 from agentops.clients.tavily_client import TavilyClientService
 from agentops.core.logger import logger
 from agentops.domains.research.models import ResearchResult
@@ -19,7 +17,7 @@ class TavilyResearchTool:
         self,
         query: str,
         max_results: int = 5,
-    ) -> List[ResearchResult]:
+    ) -> list[ResearchResult]:
 
         response = self.client.search(
             query=query,
@@ -29,30 +27,19 @@ class TavilyResearchTool:
         findings = []
 
         for item in response.get("results", []):
-
             findings.append(
-
                 ResearchResult(
-
                     source="Tavily",
-
                     title=item.get("title", ""),
-
                     summary=item.get("content", ""),
-
                     url=item.get("url"),
-
                     confidence=0.90,
-
                     metadata={
                         "score": item.get("score"),
                     },
                 )
-
             )
 
-        logger.info(
-            f"Normalized {len(findings)} Tavily result(s)"
-        )
+        logger.info(f"Normalized {len(findings)} Tavily result(s)")
 
         return findings

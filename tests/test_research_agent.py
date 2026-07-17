@@ -7,9 +7,7 @@ async def main():
 
     agent = ResearchAgent()
 
-    result = await agent.ask(
-        "What is Agentic AI?"
-    )
+    result = await agent.ask("What is Agentic AI?")
 
     print()
 
@@ -21,5 +19,4 @@ async def main():
 
 
 if __name__ == "__main__":
-
     asyncio.run(main())

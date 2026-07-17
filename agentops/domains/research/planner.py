@@ -4,7 +4,7 @@ Research Planner
 Converts a user request into executable research tasks.
 """
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 
 @dataclass
@@ -47,7 +47,6 @@ class ResearchPlanner:
                 "bank",
             ]
         ):
-
             tasks.extend(
                 [
                     ResearchTask(

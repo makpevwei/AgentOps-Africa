@@ -11,7 +11,6 @@ from pydantic import BaseModel
 
 
 class StockQuote(BaseModel):
-
     symbol: str
 
     company_name: str
@@ -36,7 +35,6 @@ class StockQuote(BaseModel):
 
 
 class CompanyFundamentals(BaseModel):
-
     company_name: str
 
     sector: str | None = None
@@ -51,7 +49,6 @@ class CompanyFundamentals(BaseModel):
 
 
 class PriceHistoryPoint(BaseModel):
-
     date: datetime
 
     open: float

@@ -3,23 +3,17 @@ from pathlib import Path
 from agentops.builders.agent_builder import AgentBuilder
 from agentops.tools.research.langchain_tools import tavily_search
 
-
 PROMPT = (
-    Path(__file__)
-    .resolve()
-    .parent.parent
-    / "prompts"
-    / "research_system.txt"
+    Path(__file__).resolve().parent.parent / "prompts" / "research_system.txt"
 ).read_text()
 
 
 class ResearchAgent:
-
     def __init__(self):
-        
+
         self.tools = [
-        tavily_search,
-    ]
+            tavily_search,
+        ]
 
         self.agent = AgentBuilder.build_deep_agent(
             tools=self.tools,

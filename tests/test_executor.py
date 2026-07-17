@@ -3,7 +3,6 @@ from agentops.domains.research.planner import ResearchPlanner
 
 
 class FakeTool:
-
     def search(self, query):
 
         return []
@@ -13,9 +12,7 @@ def main():
 
     planner = ResearchPlanner()
 
-    tasks = planner.create_plan(
-        "Should I invest in Zenith Bank?"
-    )
+    tasks = planner.create_plan("Should I invest in Zenith Bank?")
 
     executor = ResearchExecutor()
 

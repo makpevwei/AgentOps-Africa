@@ -7,21 +7,18 @@ findings into a structured CompanyProfile.
 
 from langchain_core.messages import HumanMessage
 
-from agentops.providers.model_provider import ChatModelProvider
 from agentops.domains.companies.models import CompanyProfile
 from agentops.domains.research.models import ResearchResult
+from agentops.providers.model_provider import ChatModelProvider
 
 
 class CompanyNormalizer:
-
     def __init__(self):
 
         model = ChatModelProvider.create()
 
         # GPT-5 / Gemini support structured output
-        self.model = model.with_structured_output(
-            CompanyProfile
-        )
+        self.model = model.with_structured_output(CompanyProfile)
 
     def normalize(
         self,
@@ -32,7 +29,6 @@ class CompanyNormalizer:
         context = ""
 
         for item in findings:
-
             context += f"""
 
 Source:
@@ -106,10 +102,4 @@ Research:
 {context}
 """
 
-        return self.model.invoke(
-            [
-                HumanMessage(
-                    content=prompt
-                )
-            ]
-        )
+        return self.model.invoke([HumanMessage(content=prompt)])

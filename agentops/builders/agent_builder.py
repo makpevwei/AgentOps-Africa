@@ -16,11 +16,10 @@ Future Builders
 """
 
 from deepagents import create_deep_agent
-
 from langgraph.prebuilt import create_react_agent
 
-from agentops.providers.model_provider import ChatModelProvider
 from agentops.core.logger import logger
+from agentops.providers.model_provider import ChatModelProvider
 
 
 class AgentBuilder:

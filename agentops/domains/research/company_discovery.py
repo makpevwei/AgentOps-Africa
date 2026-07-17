@@ -6,7 +6,6 @@ from agentops.tools.research.tavily_tool import TavilyResearchTool
 
 
 class CompanyDiscovery:
-
     def __init__(self):
         self.tool = TavilyResearchTool()
 

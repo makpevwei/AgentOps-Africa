@@ -15,7 +15,6 @@ def main():
     print("=" * 60)
 
     for result in results:
-
         print()
 
         print(result.title)

@@ -43,14 +43,12 @@ class CompanyResolver:
         # =====================================================
 
         for company in COMPANIES.values():
-
             names = [
                 company.company_name,
                 *company.aliases,
             ]
 
             for name in names:
-
                 self.lookup[name.lower()] = company
 
         # =====================================================
@@ -58,14 +56,12 @@ class CompanyResolver:
         # =====================================================
 
         for company in self.registry.load():
-
             names = [
                 company.company_name,
                 *company.aliases,
             ]
 
             for name in names:
-
                 self.lookup[name.lower()] = company
 
     def resolve(
@@ -80,7 +76,6 @@ class CompanyResolver:
         # =====================================================
 
         if query in self.lookup:
-
             return self.lookup[query]
 
         # =====================================================
@@ -94,11 +89,9 @@ class CompanyResolver:
         )
 
         if match:
-
             best_match, score, _ = match
 
             if score >= 85:
-
                 return self.lookup[best_match]
 
         # =====================================================

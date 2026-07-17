@@ -6,29 +6,18 @@ def main():
     resolver = CompanyResolver()
 
     companies = [
-
         "GTB",
-
         "Zenit",
-
         "Tesla",
-
         "Moniepoint",
-
         "Flutterwave",
-
         "Paystack",
-
         "Nomba",
-
         "PiggyVest",
-
         "PalmPay",
-
     ]
 
     for name in companies:
-
         print()
 
         print("=" * 70)

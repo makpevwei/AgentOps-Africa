@@ -1,6 +1,6 @@
-from agentops.core.model_provider import ChatModelProvider
-from agentops.core.logger import logger
 from agentops.config.settings import settings
+from agentops.core.logger import logger
+from agentops.core.model_provider import ChatModelProvider
 
 
 def main():
@@ -12,7 +12,7 @@ def main():
     logger.info("Environment: %s", settings.ENVIRONMENT)
     logger.info("Provider: %s", settings.LLM_PROVIDER)
     logger.info("Model: %s", settings.DEFAULT_MODEL)
-    
+
     model = ChatModelProvider.create()
 
     logger.info("")

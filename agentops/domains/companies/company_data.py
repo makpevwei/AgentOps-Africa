@@ -9,9 +9,7 @@ Only company data.
 
 from agentops.domains.companies.models import CompanyProfile
 
-
 COMPANIES = {
-
     "gtco": CompanyProfile(
         company_name="GTCO Plc",
         aliases=[
@@ -24,7 +22,6 @@ COMPANIES = {
         country="Nigeria",
         industry="Banking",
     ),
-
     "zenith": CompanyProfile(
         company_name="Zenith Bank Plc",
         aliases=[
@@ -36,7 +33,6 @@ COMPANIES = {
         country="Nigeria",
         industry="Banking",
     ),
-
     "access": CompanyProfile(
         company_name="Access Holdings Plc",
         aliases=[
@@ -48,7 +44,6 @@ COMPANIES = {
         country="Nigeria",
         industry="Banking",
     ),
-
     "uba": CompanyProfile(
         company_name="United Bank for Africa Plc",
         aliases=[
@@ -60,7 +55,6 @@ COMPANIES = {
         country="Nigeria",
         industry="Banking",
     ),
-
     "mtn": CompanyProfile(
         company_name="MTN Nigeria",
         aliases=[
@@ -71,7 +65,6 @@ COMPANIES = {
         country="Nigeria",
         industry="Telecommunications",
     ),
-
     "dangote": CompanyProfile(
         company_name="Dangote Cement Plc",
         aliases=[
@@ -83,7 +76,6 @@ COMPANIES = {
         country="Nigeria",
         industry="Manufacturing",
     ),
-
     "apple": CompanyProfile(
         company_name="Apple Inc.",
         aliases=[
@@ -94,7 +86,6 @@ COMPANIES = {
         country="USA",
         industry="Technology",
     ),
-
     "microsoft": CompanyProfile(
         company_name="Microsoft Corporation",
         aliases=[
@@ -106,7 +97,6 @@ COMPANIES = {
         country="USA",
         industry="Technology",
     ),
-
     "tesla": CompanyProfile(
         company_name="Tesla Inc.",
         aliases=[

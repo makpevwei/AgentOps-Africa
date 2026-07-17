@@ -33,29 +33,23 @@ def main():
     engine = ResearchEngine()
 
     companies = [
-
         "Apple",
         "GTB",
         "Zenith Bank",
         "Moniepoint",
         "Flutterwave",
         "Stripe",
-
     ]
 
     for company in companies:
-
         try:
-
             test_company(engine, company)
 
         except Exception as e:
-
             print(f"ERROR: {company}")
 
             print(e)
 
 
 if __name__ == "__main__":
-
     main()

@@ -9,9 +9,7 @@ from agentops.ai.prompts.base_prompt_builder import BasePromptBuilder
 from agentops.domains.research.research_context import ResearchContext
 
 
-class FinancialPromptBuilder(
-    BasePromptBuilder[ResearchContext]
-):
+class FinancialPromptBuilder(BasePromptBuilder[ResearchContext]):
     """
     Builds prompts for financial analysis.
     """
