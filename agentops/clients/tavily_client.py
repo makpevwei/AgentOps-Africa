@@ -30,7 +30,7 @@ class TavilyClientService:
         search_depth: str = "advanced",
     ):
 
-        logger.info(f"Tavily Client -> {query}")
+        logger.info("Tavily Client -> %s", query)
 
         return self.client.search(
             query=query,

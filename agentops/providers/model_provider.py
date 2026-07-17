@@ -56,10 +56,8 @@ class ChatModelProvider:
         else:
             model_name = "Unknown"
 
-        logger.info(f"Initializing LLM Provider : {provider}")
-        logger.info(f"Using Model              : {model_name}")
-
-        logger.info(f"Initializing LLM Provider: {provider}")
+            logger.info("Initializing LLM Provider: %s", provider)
+            logger.info("Using Model: %s", model_name)
 
         # ============================================================
         # OpenAI
