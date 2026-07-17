@@ -4,12 +4,12 @@ Analysis Models
 Intermediate outputs produced by specialized analyzers.
 """
 
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
 class BusinessAnalysis(BaseModel):
     """
-    Business analysis.
+    Structured business analysis.
     """
 
     overview: str
@@ -25,23 +25,23 @@ class BusinessAnalysis(BaseModel):
 
 class FinancialAnalysis(BaseModel):
     """
-    Financial analysis.
+    Structured financial analysis.
     """
 
     summary: str
 
-    strengths: list[str] = Field(default_factory=list)
+    valuation: str
 
-    weaknesses: list[str] = Field(default_factory=list)
+    profitability: str
 
-    opportunities: list[str] = Field(default_factory=list)
+    growth: str
 
-    threats: list[str] = Field(default_factory=list)
+    financial_strength: str
 
 
 class RiskAnalysis(BaseModel):
     """
-    Risk analysis.
+    Structured risk assessment.
     """
 
     overall_risk: str
@@ -57,7 +57,7 @@ class RiskAnalysis(BaseModel):
 
 class RecommendationAnalysis(BaseModel):
     """
-    Investment recommendation.
+    Structured investment recommendation.
     """
 
     action: str
@@ -67,3 +67,18 @@ class RecommendationAnalysis(BaseModel):
     investment_horizon: str
 
     confidence: float
+
+
+class SWOTAnalysis(BaseModel):
+    """
+    SWOT analysis produced independently of
+    financial or business analysis.
+    """
+
+    strengths: list[str]
+
+    weaknesses: list[str]
+
+    opportunities: list[str]
+
+    threats: list[str]

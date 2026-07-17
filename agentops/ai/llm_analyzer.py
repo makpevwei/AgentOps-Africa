@@ -7,9 +7,11 @@ Reusable AI execution layer for all analyzers.
 import json
 from typing import Type
 
+from langchain_core.messages import HumanMessage, SystemMessage
 from pydantic import BaseModel, ValidationError
 
-from agentops.providers.model_provider import ChatModelProvider
+from agentops.ai.prompt_template import PromptTemplate
+from agentops.ai.ai_client import AIClient
 
 
 class LLMAnalyzer:
@@ -19,29 +21,23 @@ class LLMAnalyzer:
     """
 
     def __init__(self):
-
-        self._llm = ChatModelProvider.create()
+        self._client = AIClient()
 
     def run(
         self,
-        prompt: str,
+        prompt: PromptTemplate,
         response_model: Type[BaseModel],
     ) -> BaseModel:
         """
         Execute the prompt and validate the response.
-
-        Args:
-            prompt:
-                Prompt sent to the LLM.
-
-            response_model:
-                Expected Pydantic model.
-
-        Returns:
-            Instance of response_model.
         """
 
-        response = self._llm.invoke(prompt)
+        messages = [
+            SystemMessage(content=prompt.system),
+            HumanMessage(content=prompt.user),
+        ]
+
+        response = self._client.invoke(messages)
 
         content = response.content
 
@@ -51,19 +47,15 @@ class LLMAnalyzer:
             )
 
         try:
-
             data = json.loads(content)
-
             return response_model.model_validate(data)
 
         except json.JSONDecodeError as ex:
-
             raise ValueError(
                 "LLM returned invalid JSON."
             ) from ex
 
         except ValidationError as ex:
-
             raise ValueError(
                 f"{response_model.__name__} validation failed."
             ) from ex
