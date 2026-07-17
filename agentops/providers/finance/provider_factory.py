@@ -1,13 +1,11 @@
 """
 Finance Provider Factory
 
-Selects the most appropriate finance provider
-for a company based on its profile.
+Selects the appropriate finance provider.
 """
 
 from agentops.domains.companies.models import CompanyProfile
 from agentops.providers.finance.base_provider import BaseFinanceProvider
-from agentops.providers.finance.ngx_provider import NgxFinanceProvider
 from agentops.providers.finance.private_provider import PrivateCompanyProvider
 from agentops.providers.finance.yahoo_provider import YahooFinanceProvider
 
@@ -22,35 +20,19 @@ class FinanceProviderFactory:
     def create(
         company: CompanyProfile,
     ) -> BaseFinanceProvider:
+        """
+        Select a finance provider.
 
-        # ---------------------------------------------
-        # Private Companies
-        # ---------------------------------------------
+        Current Strategy
+        ----------------
+        - Private companies -> PrivateCompanyProvider
+        - All listed companies -> YahooFinanceProvider
+
+        NGX-specific provider will be introduced later
+        when live NGX integration is implemented.
+        """
 
         if not company.ticker:
             return PrivateCompanyProvider()
-
-        # ---------------------------------------------
-        # Nigerian Exchange
-        # ---------------------------------------------
-
-        if company.exchange:
-            exchange = company.exchange.upper()
-
-            if exchange == "NGX":
-                return NgxFinanceProvider()
-
-            if exchange in {
-                "NASDAQ",
-                "NYSE",
-                "NMS",
-                "NYSEARCA",
-                "AMEX",
-            }:
-                return YahooFinanceProvider()
-
-        # ---------------------------------------------
-        # Default
-        # ---------------------------------------------
 
         return YahooFinanceProvider()

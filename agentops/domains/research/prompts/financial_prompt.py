@@ -31,9 +31,9 @@ class FinancialPromptBuilder(BasePromptBuilder[ResearchContext]):
         system = """
 You are a Senior Equity Research Analyst.
 
-Your responsibility is to perform a professional financial analysis of a company.
+Your responsibility is to perform a professional financial analysis of a company using ONLY the financial information provided.
 
-Base your analysis on the financial metrics provided.
+Do not invent financial metrics that are missing.
 
 Return ONLY valid JSON.
 
@@ -45,7 +45,11 @@ Be concise but insightful.
 """
 
         user = f"""
-Analyze the following financial information.
+Analyze the following company.
+
+=========================
+COMPANY
+=========================
 
 Company:
 {company.company_name}
@@ -60,69 +64,57 @@ Country:
 MARKET DATA
 =========================
 
+Ticker:
+{quote.symbol if quote else "N/A"}
+
+Exchange:
+{quote.exchange if quote else "N/A"}
+
 Current Price:
-{quote.current_price}
+{quote.price if quote else "N/A"}
+
+Previous Close:
+{quote.previous_close if quote else "N/A"}
+
+Price Change:
+{quote.change if quote else "N/A"}
+
+Change Percent:
+{quote.change_percent if quote else "N/A"}
 
 Currency:
-{quote.currency}
-
-52 Week High:
-{quote.high_52_week}
-
-52 Week Low:
-{quote.low_52_week}
-
-=========================
-FUNDAMENTALS
-=========================
+{quote.currency if quote else "N/A"}
 
 Market Cap:
-{fundamentals.market_cap}
+{quote.market_cap if quote else "N/A"}
 
-Enterprise Value:
-{fundamentals.enterprise_value}
+Volume:
+{quote.volume if quote else "N/A"}
 
-PE Ratio:
-{fundamentals.pe_ratio}
+=========================
+COMPANY INFORMATION
+=========================
 
-Forward PE:
-{fundamentals.forward_pe}
+Sector:
+{fundamentals.sector if fundamentals else "N/A"}
 
-EPS:
-{fundamentals.eps}
+Industry:
+{fundamentals.industry if fundamentals else "N/A"}
 
-Dividend Yield:
-{fundamentals.dividend_yield}
+Employees:
+{fundamentals.employees if fundamentals else "N/A"}
 
-Revenue:
-{fundamentals.revenue}
+Website:
+{fundamentals.website if fundamentals else "N/A"}
 
-Gross Margin:
-{fundamentals.gross_margin}
-
-Operating Margin:
-{fundamentals.operating_margin}
-
-Net Margin:
-{fundamentals.net_margin}
-
-ROE:
-{fundamentals.return_on_equity}
-
-Debt to Equity:
-{fundamentals.debt_to_equity}
-
-Current Ratio:
-{fundamentals.current_ratio}
-
-Free Cash Flow:
-{fundamentals.free_cash_flow}
+Description:
+{fundamentals.description if fundamentals else "N/A"}
 
 =========================
 OUTPUT FORMAT
 =========================
 
-Return ONLY valid JSON in this format.
+Return ONLY valid JSON.
 
 {{
     "summary": "...",

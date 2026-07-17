@@ -53,6 +53,11 @@ class ResearchEngine:
         )
 
         finance_snapshot = self.finance_service.get_snapshot(company)
+        
+        logger.info(
+            "Finance Snapshot: %s",
+            finance_snapshot.model_dump(),
+        )
 
         context = ResearchContext(
             query=company_name,

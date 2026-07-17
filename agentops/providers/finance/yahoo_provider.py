@@ -8,6 +8,7 @@ Yahoo Finance in a single provider session.
 from datetime import datetime
 
 from agentops.clients.yahoo_client import YahooClient
+from agentops.core.logger import logger
 from agentops.domains.companies.models import CompanyProfile
 from agentops.domains.finance.finance_models import (
     CompanyFundamentals,
@@ -24,7 +25,6 @@ class YahooFinanceProvider(BaseFinanceProvider):
     """
 
     def __init__(self):
-
         self.client = YahooClient()
 
     def get_snapshot(
@@ -32,17 +32,11 @@ class YahooFinanceProvider(BaseFinanceProvider):
         company: CompanyProfile,
     ) -> FinanceSnapshot:
 
-        # -------------------------------------------------
-        # Create ONE Yahoo ticker instance
-        # -------------------------------------------------
+        logger.info("Retrieving finance snapshot for %s", company.company_name)
 
         ticker = self.client.get_ticker(company.ticker)
 
         info = ticker.info
-
-        # -------------------------------------------------
-        # Quote
-        # -------------------------------------------------
 
         quote = StockQuote(
             symbol=company.ticker,
@@ -51,16 +45,13 @@ class YahooFinanceProvider(BaseFinanceProvider):
             currency=info.get("currency"),
             price=info.get("currentPrice"),
             previous_close=info.get("previousClose"),
-            change=(info.get("currentPrice") or 0) - (info.get("previousClose") or 0),
+            change=(info.get("currentPrice") or 0)
+            - (info.get("previousClose") or 0),
             change_percent=info.get("regularMarketChangePercent"),
             market_cap=info.get("marketCap"),
             volume=info.get("volume"),
             timestamp=datetime.utcnow(),
         )
-
-        # -------------------------------------------------
-        # Fundamentals
-        # -------------------------------------------------
 
         fundamentals = CompanyFundamentals(
             company_name=company.company_name,
@@ -70,10 +61,6 @@ class YahooFinanceProvider(BaseFinanceProvider):
             employees=info.get("fullTimeEmployees"),
             description=info.get("longBusinessSummary"),
         )
-
-        # -------------------------------------------------
-        # Price History
-        # -------------------------------------------------
 
         history = []
 
@@ -91,19 +78,20 @@ class YahooFinanceProvider(BaseFinanceProvider):
                 )
             )
 
-        # -------------------------------------------------
-        # News
-        # -------------------------------------------------
-
         news = ticker.news
 
-        # -------------------------------------------------
-        # Snapshot
-        # -------------------------------------------------
-
-        return FinanceSnapshot(
+        snapshot = FinanceSnapshot(
             quote=quote,
             fundamentals=fundamentals,
             history=history,
             news=news,
         )
+
+        logger.info(
+            "Finance snapshot created: symbol=%s price=%s market_cap=%s",
+            quote.symbol,
+            quote.price,
+            quote.market_cap,
+        )
+
+        return snapshot

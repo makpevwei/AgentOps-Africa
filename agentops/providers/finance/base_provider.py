@@ -1,15 +1,15 @@
 """
 Base Finance Provider
 
-Defines the contract that every finance provider
-(Yahoo, Finnhub, Alpha Vantage, NGX, etc.)
-must implement.
+Every finance provider must implement this interface.
 """
+
+from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
 from agentops.domains.companies.models import CompanyProfile
-from agentops.domains.finance.finance_snapshot import FinanceSnapshot
+from agentops.domains.finance.provider_result import ProviderResult
 
 
 class BaseFinanceProvider(ABC):
@@ -17,16 +17,14 @@ class BaseFinanceProvider(ABC):
     Abstract base class for all finance providers.
     """
 
+    name: str = "Unknown"
+
     @abstractmethod
     def get_snapshot(
         self,
         company: CompanyProfile,
-    ) -> FinanceSnapshot:
+    ) -> ProviderResult:
         """
-        Retrieve a complete financial snapshot for a company.
-
-        The implementation should gather everything it can
-        from a single provider session and return it as a
-        FinanceSnapshot.
+        Retrieve a financial snapshot for a company.
         """
         raise NotImplementedError

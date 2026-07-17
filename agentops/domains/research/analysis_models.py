@@ -82,3 +82,39 @@ class SWOTAnalysis(BaseModel):
     opportunities: list[str]
 
     threats: list[str]
+
+class ExecutiveAnalysis(BaseModel):
+    """
+    Complete executive analysis produced by combining
+    all specialized analyzers.
+    """
+
+    executive_summary: str
+
+    business: BusinessAnalysis
+
+    financial: FinancialAnalysis
+
+    risks: RiskAnalysis
+
+    swot: SWOTAnalysis
+
+    recommendation: RecommendationAnalysis
+
+class CompanyAnalysis(BaseModel):
+    """
+    Aggregated company analysis produced by combining
+    specialized analyzers.
+    """
+
+    company_name: str
+
+    business: BusinessAnalysis
+
+    financial: FinancialAnalysis
+
+    risk: RiskAnalysis | None = None
+
+    swot: SWOTAnalysis | None = None
+
+    recommendation: RecommendationAnalysis | None = None

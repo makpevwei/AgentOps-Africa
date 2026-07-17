@@ -16,7 +16,11 @@ class CompanyProfile(BaseModel):
 
     aliases: list[str] = Field(default_factory=list)
 
+    # Canonical ticker used internally
     ticker: str | None = None
+
+    # Provider-specific finance symbol
+    finance_symbol: str | None = None
 
     exchange: str | None = None
 

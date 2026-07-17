@@ -17,6 +17,7 @@ Future Providers
 - NVIDIA NIM
 """
 
+from langchain_core.language_models.chat_models import BaseChatModel
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
@@ -29,35 +30,64 @@ from agentops.core.logger import logger
 
 class ChatModelProvider:
     """
-    Creates the configured chat model.
+    Enterprise Chat Model Factory.
 
-    The provider is selected from the .env file.
+    Creates and returns the configured LLM provider
+    based on application settings.
+
+    Supported Providers:
+        - OpenAI
+        - Google Gemini
+        - Groq
+        - OpenRouter
+
+    The provider is selected from the application
+    configuration.
 
     Example:
 
         LLM_PROVIDER=openai
-
-        DEFAULT_MODEL=gpt-4o-mini
+        OPENAI_MODEL=gpt-5.5
     """
 
     @staticmethod
-    def create():
+    def create() -> BaseChatModel:
+        """
+        Create and return the configured chat model.
+
+        Returns:
+            BaseChatModel
+
+        Raises:
+            ProviderError:
+                If an unsupported provider is configured.
+        """
 
         provider = settings.LLM_PROVIDER.lower()
 
+        # ============================================================
+        # Resolve Model Name
+        # ============================================================
+
         if provider == LLMProvider.OPENAI:
             model_name = settings.OPENAI_MODEL
+
         elif provider == LLMProvider.GROQ:
             model_name = settings.GROQ_MODEL
+
         elif provider == LLMProvider.GEMINI:
             model_name = settings.GEMINI_MODEL
+
         elif provider == LLMProvider.OPENROUTER:
             model_name = settings.OPENROUTER_MODEL
-        else:
-            model_name = "Unknown"
 
-            logger.info("Initializing LLM Provider: %s", provider)
-            logger.info("Using Model: %s", model_name)
+        else:
+            raise ProviderError(
+                f"Unsupported LLM Provider: {provider}"
+            )
+
+        logger.info("Initializing LLM Provider: %s", provider)
+        logger.info("Using Model: %s", model_name)
 
         # ============================================================
         # OpenAI
@@ -65,7 +95,7 @@ class ChatModelProvider:
 
         if provider == LLMProvider.OPENAI:
             return ChatOpenAI(
-                model=settings.OPENAI_MODEL,
+                model=model_name,
                 temperature=settings.TEMPERATURE,
                 timeout=settings.REQUEST_TIMEOUT,
                 streaming=settings.STREAMING,
@@ -73,12 +103,12 @@ class ChatModelProvider:
             )
 
         # ============================================================
-        # Gemini
+        # Google Gemini
         # ============================================================
 
-        elif provider == LLMProvider.GEMINI:
+        if provider == LLMProvider.GEMINI:
             return ChatGoogleGenerativeAI(
-                model=settings.GEMINI_MODEL,
+                model=model_name,
                 temperature=settings.TEMPERATURE,
             )
 
@@ -86,9 +116,9 @@ class ChatModelProvider:
         # Groq
         # ============================================================
 
-        elif provider == LLMProvider.GROQ:
+        if provider == LLMProvider.GROQ:
             return ChatGroq(
-                model=settings.GROQ_MODEL,
+                model=model_name,
                 temperature=settings.TEMPERATURE,
             )
 
@@ -96,18 +126,21 @@ class ChatModelProvider:
         # OpenRouter
         # ============================================================
 
-        elif provider == LLMProvider.OPENROUTER:
+        if provider == LLMProvider.OPENROUTER:
             return ChatOpenAI(
                 api_key=settings.OPENROUTER_API_KEY,
                 base_url=settings.OPENROUTER_BASE_URL,
-                model=settings.OPENROUTER_MODEL,
+                model=model_name,
                 temperature=settings.TEMPERATURE,
                 timeout=settings.REQUEST_TIMEOUT,
                 streaming=settings.STREAMING,
+                max_retries=5,
             )
 
         # ============================================================
-        # Unsupported
+        # Safety Check
         # ============================================================
 
-        raise ProviderError(f"Unsupported LLM Provider: {provider}")
+        raise ProviderError(
+            f"Failed to initialize provider: {provider}"
+        )
