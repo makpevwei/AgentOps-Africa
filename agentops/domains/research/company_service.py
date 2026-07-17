@@ -14,7 +14,7 @@ should use for resolving companies.
 
 from agentops.domains.research.company_discovery import CompanyDiscovery
 from agentops.domains.research.company_normalizer import CompanyNormalizer
-from agentops.domains.research.company_registry import CompanyRegistry
+from agentops.domains.companies.company_registry import CompanyRegistry
 from agentops.domains.research.company_resolver import CompanyResolver
 from agentops.domains.companies.models import CompanyProfile
 
