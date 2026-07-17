@@ -1,78 +1,95 @@
 """
 Enterprise Company Resolver
 
-Resolves company names, aliases and stock tickers
-into a normalized CompanyProfile object.
+Responsible ONLY for resolving known companies.
+
+Responsibilities
+----------------
+1. Load built-in company dataset
+2. Load learned company registry
+3. Exact matching
+4. Fuzzy matching
+
+It NEVER:
+- discovers companies
+- calls an LLM
+- searches Tavily
+- saves companies
 """
 
 from rapidfuzz import fuzz, process
 
 from agentops.domains.research.company_data import COMPANIES
+from agentops.domains.research.company_registry import CompanyRegistry
 from agentops.domains.research.models import CompanyProfile
 
 
 class CompanyResolver:
     """
-    Resolves company names into normalized CompanyProfile objects.
+    Resolves already-known companies.
+
+    Unknown companies should be handled
+    by CompanyService.
     """
 
     def __init__(self):
 
-        # ==========================================================
-        # Local Company Cache
-        # ==========================================================
+        self.registry = CompanyRegistry()
 
-        self._companies = COMPANIES
+        self.lookup = {}
 
-        # ==========================================================
-        # Build Lookup Dictionary
-        # ==========================================================
+        # =====================================================
+        # Built-in Companies
+        # =====================================================
 
-        self._lookup = {}
+        for company in COMPANIES.values():
 
-        for company in self._companies.values():
+            names = [
+                company.company_name,
+                *company.aliases,
+            ]
 
-            # Company name
-            self._lookup[company.company_name.lower()] = company
+            for name in names:
 
-            # Ticker
-            if company.ticker:
-                self._lookup[company.ticker.lower()] = company
+                self.lookup[name.lower()] = company
 
-            # Aliases
-            for alias in company.aliases:
-                self._lookup[alias.lower()] = company
+        # =====================================================
+        # Learned Companies
+        # =====================================================
 
-    # ==============================================================
-    # Resolve Company
-    # ==============================================================
+        for company in self.registry.load():
 
-    def resolve(self, query: str) -> CompanyProfile | None:
-        """
-        Resolve a company from user input.
+            names = [
+                company.company_name,
+                *company.aliases,
+            ]
 
-        Resolution order:
+            for name in names:
 
-        1. Exact Match
-        2. Fuzzy Match
-        """
+                self.lookup[name.lower()] = company
 
-        query = query.lower().strip()
+    def resolve(
+        self,
+        query: str,
+    ) -> CompanyProfile | None:
 
-        # ----------------------------------------------------------
+        query = query.strip().lower()
+
+        # =====================================================
         # Exact Match
-        # ----------------------------------------------------------
+        # =====================================================
 
-        if query in self._lookup:
-            return self._lookup[query]
+        if query in self.lookup:
 
-        # ----------------------------------------------------------
+            return self.lookup[query]
+
+        # =====================================================
         # Fuzzy Match
-        # ----------------------------------------------------------
+        # =====================================================
 
         match = process.extractOne(
             query,
-            self._lookup.keys(),
+            self.lookup.keys(),
             scorer=fuzz.WRatio,
         )
 
@@ -80,11 +97,12 @@ class CompanyResolver:
 
             best_match, score, _ = match
 
-            if score >= 80:
-                return self._lookup[best_match]
+            if score >= 85:
 
-        # ----------------------------------------------------------
-        # Nothing Found
-        # ----------------------------------------------------------
+                return self.lookup[best_match]
+
+        # =====================================================
+        # Unknown Company
+        # =====================================================
 
         return None
