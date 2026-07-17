@@ -1,56 +1,50 @@
 """
 Enterprise Research Engine
 
-High-level orchestration for company research.
+Builds a complete research context for a company.
 """
 
 from agentops.domains.research.company_service import CompanyService
 from agentops.domains.research.finance_service import FinanceService
+from agentops.domains.research.research_context import ResearchContext
 
 
 class ResearchEngine:
+    """
+    High-level orchestration for company research.
+    """
 
     def __init__(self):
 
         self.company_service = CompanyService()
         self.finance_service = FinanceService()
 
-    def get_quote(
+    def build_context(
         self,
         company_name: str,
-    ):
+    ) -> ResearchContext:
+        """
+        Build a complete research context for a company.
+        """
+
+        # -------------------------------------------------
+        # Resolve Company
+        # -------------------------------------------------
 
         company = self.company_service.resolve(company_name)
 
-        return self.finance_service.get_quote(company)
+        # -------------------------------------------------
+        # Retrieve Financial Snapshot
+        # -------------------------------------------------
 
-    def get_company_info(
-        self,
-        company_name: str,
-    ):
+        finance_snapshot = self.finance_service.get_snapshot(company)
 
-        company = self.company_service.resolve(company_name)
+        # -------------------------------------------------
+        # Build Context
+        # -------------------------------------------------
 
-        return self.finance_service.get_company_info(company)
-
-    def get_price_history(
-        self,
-        company_name: str,
-        period: str = "1y",
-    ):
-
-        company = self.company_service.resolve(company_name)
-
-        return self.finance_service.get_price_history(
-            company,
-            period,
+        return ResearchContext(
+            query=company_name,
+            company=company,
+            finance=finance_snapshot,
         )
-
-    def get_news(
-        self,
-        company_name: str,
-    ):
-
-        company = self.company_service.resolve(company_name)
-
-        return self.finance_service.get_news(company)

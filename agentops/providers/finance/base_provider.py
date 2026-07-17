@@ -1,44 +1,32 @@
 """
-Enterprise Finance Provider Interface.
+Base Finance Provider
+
+Defines the contract that every finance provider
+(Yahoo, Finnhub, Alpha Vantage, NGX, etc.)
+must implement.
 """
 
 from abc import ABC, abstractmethod
 
-from agentops.domains.research.finance_models import (
-    CompanyFundamentals,
-    PriceHistoryPoint,
-    StockQuote,
-)
+from agentops.domains.research.finance_snapshot import FinanceSnapshot
 from agentops.domains.research.models import CompanyProfile
 
 
 class BaseFinanceProvider(ABC):
+    """
+    Abstract base class for all finance providers.
+    """
 
     @abstractmethod
-    def get_quote(
+    def get_snapshot(
         self,
         company: CompanyProfile,
-    ) -> StockQuote:
-        pass
+    ) -> FinanceSnapshot:
+        """
+        Retrieve a complete financial snapshot for a company.
 
-    @abstractmethod
-    def get_company_info(
-        self,
-        company: CompanyProfile,
-    ) -> CompanyFundamentals:
-        pass
-
-    @abstractmethod
-    def get_news(
-        self,
-        company: CompanyProfile,
-    ):
-        pass
-
-    @abstractmethod
-    def get_price_history(
-        self,
-        company: CompanyProfile,
-        period: str = "1y",
-    ) -> list[PriceHistoryPoint]:
-        pass
+        The implementation should gather everything it can
+        from a single provider session and return it as a
+        FinanceSnapshot.
+        """
+        raise NotImplementedError
