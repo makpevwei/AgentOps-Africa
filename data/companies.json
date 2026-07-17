@@ -1,0 +1,104 @@
+[
+    {
+        "company_name": "Moniepoint Inc.",
+        "aliases": [
+            "Moniepoint",
+            "TeamApt"
+        ],
+        "ticker": "",
+        "exchange": "",
+        "country": "Nigeria",
+        "industry": "Business Banking, Financial Technology",
+        "sector": "",
+        "website": "https://moniepoint.com"
+    },
+    {
+        "company_name": "Flutterwave",
+        "aliases": [
+            "Flutterwave",
+            "Flutterwave Inc.",
+            "Flutterwave Mobile"
+        ],
+        "ticker": "",
+        "exchange": "",
+        "country": "Nigeria",
+        "industry": "Financial technology",
+        "sector": "Financial Services",
+        "website": "www.flutterwave.com"
+    },
+    {
+        "company_name": "Paystack",
+        "aliases": [
+            "Paystack",
+            "Paystack Inc.",
+            "Paystack Payments"
+        ],
+        "ticker": "",
+        "exchange": "",
+        "country": "Nigeria",
+        "industry": "Financial Technology (Fintech)",
+        "sector": "Financial Services",
+        "website": "https://paystack.com/"
+    },
+    {
+        "company_name": "Nomba",
+        "aliases": [
+            "Kudi",
+            "Nomba Financial Services Limited",
+            "Nomba Inc."
+        ],
+        "ticker": "",
+        "exchange": "",
+        "country": "Nigeria",
+        "industry": "FinTech",
+        "sector": "Financial Services",
+        "website": "https://www.nomba.com"
+    },
+    {
+        "company_name": "PiggyVest",
+        "aliases": [
+            "PiggyVest",
+            "Piggybank.ng",
+            "Piggytech Global Ltd."
+        ],
+        "ticker": "",
+        "exchange": "",
+        "country": "Nigeria",
+        "industry": "Financial Services",
+        "sector": "Finance",
+        "website": "https://www.piggyvest.com"
+    },
+    {
+        "company_name": "PalmPay Limited",
+        "aliases": [
+            "PalmPay",
+            "Palmpay Limited",
+            "PalmPay App",
+            "PalmPay Nigeria",
+            "PalmPay Ghana",
+            "PalmPay Tanzania",
+            "PalmPay UK"
+        ],
+        "ticker": "",
+        "exchange": "",
+        "country": "Nigeria",
+        "industry": "Banking, Financial Technology",
+        "sector": "",
+        "website": "https://www.palmpay.com"
+    },
+    {
+        "company_name": "Stripe Inc",
+        "aliases": [
+            "Stripe",
+            "Stripe Inc.",
+            "Stripe Payments",
+            "Stripe.com"
+        ],
+        "ticker": "",
+        "exchange": "",
+        "country": "United States",
+        "industry": "Financial services",
+        "sector": "Business Services & Supplies",
+        "website": "https://stripe.com"
+    }
+]

@@ -1,4 +1,4 @@
-from agentops.domains.research.company_resolver import CompanyResolver
+from agentops.domains.companies.company_resolver import CompanyResolver
 
 
 def main():
