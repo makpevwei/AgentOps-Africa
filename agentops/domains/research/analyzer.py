@@ -44,11 +44,7 @@ class ResearchAnalyzer:
             return ResearchReport.model_validate(data)
 
         except json.JSONDecodeError as ex:
-            raise ValueError(
-                "LLM did not return valid JSON."
-            ) from ex
+            raise ValueError("LLM did not return valid JSON.") from ex
 
         except ValidationError as ex:
-            raise ValueError(
-                "LLM JSON does not match ResearchReport schema."
-            ) from ex
+            raise ValueError("LLM JSON does not match ResearchReport schema.") from ex

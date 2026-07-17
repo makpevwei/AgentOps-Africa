@@ -2,7 +2,6 @@ from langchain_core.tools import tool
 
 from agentops.tools.research.tavily_tool import TavilyResearchTool
 
-
 _tavily = TavilyResearchTool()
 
 
@@ -17,9 +16,7 @@ def tavily_search(query: str) -> str:
     output = []
 
     for item in results:
-
         output.append(
-
             f"""
 Title:
 {item.title}

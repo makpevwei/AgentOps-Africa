@@ -15,13 +15,9 @@ class TavilyClientService:
     def __init__(self):
 
         if not settings.TAVILY_API_KEY:
-            raise ValueError(
-                "Missing TAVILY_API_KEY."
-            )
+            raise ValueError("Missing TAVILY_API_KEY.")
 
-        self.client = TavilyClient(
-            api_key=settings.TAVILY_API_KEY
-        )
+        self.client = TavilyClient(api_key=settings.TAVILY_API_KEY)
 
     def search(
         self,
@@ -30,7 +26,7 @@ class TavilyClientService:
         search_depth: str = "advanced",
     ):
 
-        logger.info(f"Tavily Client -> {query}")
+        logger.info("Tavily Client -> %s", query)
 
         return self.client.search(
             query=query,

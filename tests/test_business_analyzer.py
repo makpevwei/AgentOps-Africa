@@ -1,6 +1,6 @@
-from agentops.domains.research.analyzers.business_analyzer import BusinessAnalyzer
 from agentops.domains.companies.company_service import CompanyService
-from agentops.domains.research.finance_service import FinanceService
+from agentops.domains.finance.finance_service import FinanceService
+from agentops.domains.research.analyzers.business_analyzer import BusinessAnalyzer
 from agentops.domains.research.research_context import ResearchContext
 
 

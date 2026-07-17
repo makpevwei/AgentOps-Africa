@@ -21,7 +21,6 @@ def main():
     ]
 
     for query in tests:
-
         company = resolver.resolve(query)
 
         print("=" * 60)

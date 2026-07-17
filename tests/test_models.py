@@ -1,5 +1,5 @@
+from agentops.domains.companies.models import CompanyProfile
 from agentops.domains.research.models import (
-    CompanyProfile,
     ResearchReport,
     ResearchResult,
 )

@@ -1,4 +1,4 @@
-from agentops.core.model_provider import ChatModelProvider
+from agentops.providers.model_provider import ChatModelProvider
 
 
 def main():

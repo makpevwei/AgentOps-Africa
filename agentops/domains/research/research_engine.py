@@ -4,9 +4,14 @@ Enterprise Research Engine
 Builds a complete research context for a company.
 """
 
+import logging
+import time
+
 from agentops.domains.companies.company_service import CompanyService
-from agentops.domains.research.finance_service import FinanceService
+from agentops.domains.finance.finance_service import FinanceService
 from agentops.domains.research.research_context import ResearchContext
+
+logger = logging.getLogger(__name__)
 
 
 class ResearchEngine:
@@ -14,10 +19,19 @@ class ResearchEngine:
     High-level orchestration for company research.
     """
 
-    def __init__(self):
+    def __init__(
+        self,
+        company_service: CompanyService | None = None,
+        finance_service: FinanceService | None = None,
+    ):
+        """
+        Initialize the research engine.
 
-        self.company_service = CompanyService()
-        self.finance_service = FinanceService()
+        Dependencies can be injected for testing,
+        otherwise the default implementations are used.
+        """
+        self.company_service = company_service or CompanyService()
+        self.finance_service = finance_service or FinanceService()
 
     def build_context(
         self,
@@ -27,24 +41,30 @@ class ResearchEngine:
         Build a complete research context for a company.
         """
 
-        # -------------------------------------------------
-        # Resolve Company
-        # -------------------------------------------------
+        start = time.perf_counter()
+
+        logger.info("Resolving company: %s", company_name)
 
         company = self.company_service.resolve(company_name)
 
-        # -------------------------------------------------
-        # Retrieve Financial Snapshot
-        # -------------------------------------------------
+        logger.info(
+            "Fetching finance snapshot for %s",
+            company.company_name,
+        )
 
         finance_snapshot = self.finance_service.get_snapshot(company)
 
-        # -------------------------------------------------
-        # Build Context
-        # -------------------------------------------------
-
-        return ResearchContext(
+        context = ResearchContext(
             query=company_name,
             company=company,
             finance=finance_snapshot,
         )
+
+        logger.info("Research context built successfully")
+
+        logger.info(
+            "Research completed in %.2f seconds",
+            time.perf_counter() - start,
+        )
+
+        return context

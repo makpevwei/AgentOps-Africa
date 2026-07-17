@@ -12,15 +12,14 @@ This is the ONLY class the rest of the application
 should use for resolving companies.
 """
 
-from agentops.domains.research.company_discovery import CompanyDiscovery
 from agentops.domains.companies.company_normalizer import CompanyNormalizer
 from agentops.domains.companies.company_registry import CompanyRegistry
 from agentops.domains.companies.company_resolver import CompanyResolver
 from agentops.domains.companies.models import CompanyProfile
+from agentops.domains.research.company_discovery import CompanyDiscovery
 
 
 class CompanyService:
-
     def __init__(self):
 
         self.resolver = CompanyResolver()
@@ -43,7 +42,6 @@ class CompanyService:
         company = self.resolver.resolve(query)
 
         if company:
-
             return company
 
         # -----------------------------------

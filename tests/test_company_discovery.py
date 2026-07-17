@@ -12,7 +12,6 @@ def main():
     print()
 
     for result in results:
-
         print(result.title)
         print(result.url)
         print(result.summary[:250])

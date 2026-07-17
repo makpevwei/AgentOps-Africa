@@ -2,4 +2,51 @@
 name = "agentops-africa"
 version = "0.1.0"
 description = "Enterprise AI Executive Assistant"
+readme = "README.md"
 requires-python = ">=3.12"
+
+dependencies = [
+    "deepagents",
+    "google-api-python-client",
+    "google-auth",
+    "google-auth-httplib2",
+    "google-auth-oauthlib",
+    "langchain",
+    "langchain-community",
+    "langchain-google-genai",
+    "langchain-groq",
+    "langchain-mcp-adapters",
+    "langchain-openai",
+    "pydantic",
+    "pydantic-settings",
+    "pypdf",
+    "python-dotenv",
+    "python-telegram-bot",
+    "rapidfuzz",
+    "requests",
+    "rich",
+    "streamlit",
+    "tavily-python",
+    "wikipedia",
+    "yfinance",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.0",
+    "pytest-cov>=7.0.0",
+    "ruff>=0.15.22",
+]
+
+[tool.ruff]
+line-length = 88
+target-version = "py312"
+
+[tool.ruff.lint]
+select = [
+    "E",   # pycodestyle errors
+    "F",   # pyflakes
+    "I",   # import sorting
+    "UP",  # pyupgrade
+    "B",   # bugbear
+]

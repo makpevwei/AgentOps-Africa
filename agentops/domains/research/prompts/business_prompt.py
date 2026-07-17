@@ -7,9 +7,7 @@ from agentops.ai.prompts.base_prompt_builder import BasePromptBuilder
 from agentops.domains.research.research_context import ResearchContext
 
 
-class BusinessPromptBuilder(
-    BasePromptBuilder[ResearchContext]
-):
+class BusinessPromptBuilder(BasePromptBuilder[ResearchContext]):
     """
     Builds prompts for business analysis.
     """

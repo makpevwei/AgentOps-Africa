@@ -2,11 +2,11 @@
 Test the Financial Analyzer.
 """
 
+from agentops.domains.companies.company_service import CompanyService
+from agentops.domains.finance.finance_service import FinanceService
 from agentops.domains.research.analyzers.financial_analyzer import (
     FinancialAnalyzer,
 )
-from agentops.domains.companies.company_service import CompanyService
-from agentops.domains.research.finance_service import FinanceService
 from agentops.domains.research.research_context import ResearchContext
 
 

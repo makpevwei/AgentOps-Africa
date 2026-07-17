@@ -6,18 +6,15 @@ def main():
     service = CompanyService()
 
     companies = [
-
         "GTB",
         "Zenit",
         "Moniepoint",
         "Flutterwave",
         "PiggyVest",
         "Stripe",
-
     ]
 
     for company in companies:
-
         print()
 
         print("=" * 70)
@@ -32,5 +29,4 @@ def main():
 
 
 if __name__ == "__main__":
-
     main()

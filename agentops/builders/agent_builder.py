@@ -16,11 +16,10 @@ Future Builders
 """
 
 from deepagents import create_deep_agent
-
 from langgraph.prebuilt import create_react_agent
 
-from agentops.providers.model_provider import ChatModelProvider
 from agentops.core.logger import logger
+from agentops.providers.model_provider import ChatModelProvider
 
 
 class AgentBuilder:
@@ -55,7 +54,7 @@ class AgentBuilder:
         - Report generation
         """
 
-        logger.info(f"Building Deep Agent : {name}")
+        logger.info("Building Deep Agent: %s", name)
 
         model = ChatModelProvider.create()
 
@@ -90,7 +89,7 @@ class AgentBuilder:
         - Business automation
         """
 
-        logger.info(f"Building Chat Agent : {name}")
+        logger.info("Building Chat Agent: %s", name)
 
         model = ChatModelProvider.create()
 

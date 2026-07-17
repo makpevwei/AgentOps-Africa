@@ -14,6 +14,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 # APPLICATION SETTINGS
 # ==============================================================================
 
+
 class Settings(BaseSettings):
     """
     Global application settings.
@@ -40,7 +41,7 @@ class Settings(BaseSettings):
     # ==========================================================================
 
     # LLM_PROVIDER: str = Field(default="groq")
-    
+
     LLM_PROVIDER: str = Field(default="openai")
 
     OPENAI_MODEL: str = Field(default="gpt-4o-mini")
@@ -154,4 +155,3 @@ class Settings(BaseSettings):
 # ==============================================================================
 
 settings = Settings()
-

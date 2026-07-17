@@ -28,7 +28,6 @@ class FinanceProviderFactory:
         # ---------------------------------------------
 
         if not company.ticker:
-
             return PrivateCompanyProvider()
 
         # ---------------------------------------------
@@ -36,23 +35,18 @@ class FinanceProviderFactory:
         # ---------------------------------------------
 
         if company.exchange:
-
             exchange = company.exchange.upper()
 
             if exchange == "NGX":
-
                 return NgxFinanceProvider()
 
             if exchange in {
-
                 "NASDAQ",
                 "NYSE",
                 "NMS",
                 "NYSEARCA",
                 "AMEX",
-
             }:
-
                 return YahooFinanceProvider()
 
         # ---------------------------------------------

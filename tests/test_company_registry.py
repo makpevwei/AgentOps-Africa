@@ -1,6 +1,6 @@
-from agentops.domains.research.company_discovery import CompanyDiscovery
 from agentops.domains.companies.company_normalizer import CompanyNormalizer
 from agentops.domains.companies.company_registry import CompanyRegistry
+from agentops.domains.research.company_discovery import CompanyDiscovery
 
 
 def main():
@@ -27,7 +27,6 @@ def main():
     print()
 
     for item in registry.load():
-
         print(item)
 
 

@@ -10,9 +10,8 @@ from agentops.core.logger import logger
 
 
 class YahooClient:
-
     def get_ticker(self, symbol: str):
 
-        logger.info(f"Yahoo Finance -> {symbol}")
+        logger.info("Yahoo Finance -> %s", symbol)
 
         return yf.Ticker(symbol)
