@@ -87,21 +87,12 @@ class ExecutionPlan(BaseModel):
 
     @property
     def completed_tasks(self) -> int:
-        return sum(
-            task.status == TaskStatus.COMPLETED
-            for task in self.tasks
-        )
+        return sum(task.status == TaskStatus.COMPLETED for task in self.tasks)
 
     @property
     def pending_tasks(self) -> int:
-        return sum(
-            task.status == TaskStatus.PENDING
-            for task in self.tasks
-        )
+        return sum(task.status == TaskStatus.PENDING for task in self.tasks)
 
     @property
     def failed_tasks(self) -> int:
-        return sum(
-            task.status == TaskStatus.FAILED
-            for task in self.tasks
-        )
+        return sum(task.status == TaskStatus.FAILED for task in self.tasks)

@@ -1,14 +1,16 @@
 """
 Enterprise Research Engine
 
-Builds a complete research context for a company.
+Coordinates research using the Agent Runtime.
 """
+
+from __future__ import annotations
 
 import logging
 import time
 
-from agentops.domains.companies.company_service import CompanyService
-from agentops.domains.finance.finance_service import FinanceService
+from agentops.domains.agents.executor import Executor
+from agentops.domains.agents.planner import Planner
 from agentops.domains.research.research_context import ResearchContext
 
 logger = logging.getLogger(__name__)
@@ -19,53 +21,47 @@ class ResearchEngine:
     High-level orchestration for company research.
     """
 
-    def __init__(
-        self,
-        company_service: CompanyService | None = None,
-        finance_service: FinanceService | None = None,
-    ):
-        """
-        Initialize the research engine.
+    def __init__(self) -> None:
 
-        Dependencies can be injected for testing,
-        otherwise the default implementations are used.
-        """
-        self.company_service = company_service or CompanyService()
-        self.finance_service = finance_service or FinanceService()
+        self.planner = Planner()
+
+        self.executor = Executor()
 
     def build_context(
         self,
         company_name: str,
     ) -> ResearchContext:
         """
-        Build a complete research context for a company.
+        Build a research context using the Agent Runtime.
         """
 
         start = time.perf_counter()
 
-        logger.info("Resolving company: %s", company_name)
-
-        company = self.company_service.resolve(company_name)
-
         logger.info(
-            "Fetching finance snapshot for %s",
-            company.company_name,
+            "Building research context for %s",
+            company_name,
         )
 
-        finance_snapshot = self.finance_service.get_snapshot(company)
-        
-        logger.info(
-            "Finance Snapshot: %s",
-            finance_snapshot.model_dump(),
+        #
+        # Temporary migration mode.
+        #
+        # Build only the tasks currently supported by
+        # the Agent Runtime.
+        #
+        plan = self.planner.create_plan(
+            f"Analyze {company_name}",
+            full_plan=False,
+        )
+
+        agent_context = self.executor.execute(
+            plan,
         )
 
         context = ResearchContext(
             query=company_name,
-            company=company,
-            finance=finance_snapshot,
+            company=agent_context.company,
+            finance=agent_context.finance,
         )
-
-        logger.info("Research context built successfully")
 
         logger.info(
             "Research completed in %.2f seconds",

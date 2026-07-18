@@ -11,7 +11,6 @@ from agentops.domains.research.research_engine import ResearchEngine
 
 
 class AgentService:
-
     def __init__(
         self,
         research_engine: ResearchEngine | None = None,

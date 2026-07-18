@@ -5,9 +5,7 @@ task = AgentTask(
     service="finance",
     action="get_snapshot",
     description="Retrieve financial snapshot for Apple",
-    payload={
-        "company": "Apple"
-    },
+    payload={"company": "Apple"},
 )
 
 print(task.model_dump())

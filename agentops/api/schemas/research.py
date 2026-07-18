@@ -7,7 +7,8 @@ class ResearchRequest(BaseModel):
         description="Company name to research",
         examples=["MTN Nigeria"],
     )
-    
+
+
 class ResearchResponse(BaseModel):
     company: str
     industry: str

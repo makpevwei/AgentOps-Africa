@@ -45,8 +45,7 @@ class YahooFinanceProvider(BaseFinanceProvider):
             currency=info.get("currency"),
             price=info.get("currentPrice"),
             previous_close=info.get("previousClose"),
-            change=(info.get("currentPrice") or 0)
-            - (info.get("previousClose") or 0),
+            change=(info.get("currentPrice") or 0) - (info.get("previousClose") or 0),
             change_percent=info.get("regularMarketChangePercent"),
             market_cap=info.get("marketCap"),
             volume=info.get("volume"),

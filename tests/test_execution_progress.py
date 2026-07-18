@@ -31,9 +31,7 @@ print(plan.model_dump())
 
 plan.mark_completed(
     1,
-    {
-        "company": "Apple Inc."
-    },
+    {"company": "Apple Inc."},
 )
 
 print("\nCompleted Task 1")

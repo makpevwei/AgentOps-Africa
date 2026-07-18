@@ -83,6 +83,7 @@ class SWOTAnalysis(BaseModel):
 
     threats: list[str]
 
+
 class ExecutiveAnalysis(BaseModel):
     """
     Complete executive analysis produced by combining
@@ -100,6 +101,7 @@ class ExecutiveAnalysis(BaseModel):
     swot: SWOTAnalysis
 
     recommendation: RecommendationAnalysis
+
 
 class CompanyAnalysis(BaseModel):
     """

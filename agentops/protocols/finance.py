@@ -5,9 +5,7 @@ from agentops.domains.finance.finance_models import FinanceSnapshot
 
 
 class FinanceProvider(Protocol):
-
     def get_snapshot(
         self,
         company: CompanyProfile,
-    ) -> FinanceSnapshot:
-        ...
+    ) -> FinanceSnapshot: ...

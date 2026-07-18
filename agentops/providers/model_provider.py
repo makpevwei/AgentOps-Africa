@@ -82,9 +82,7 @@ class ChatModelProvider:
             model_name = settings.OPENROUTER_MODEL
 
         else:
-            raise ProviderError(
-                f"Unsupported LLM Provider: {provider}"
-            )
+            raise ProviderError(f"Unsupported LLM Provider: {provider}")
 
         logger.info("Initializing LLM Provider: %s", provider)
         logger.info("Using Model: %s", model_name)
@@ -141,6 +139,4 @@ class ChatModelProvider:
         # Safety Check
         # ============================================================
 
-        raise ProviderError(
-            f"Failed to initialize provider: {provider}"
-        )
+        raise ProviderError(f"Failed to initialize provider: {provider}")

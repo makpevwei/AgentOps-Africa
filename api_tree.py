@@ -6,7 +6,6 @@ import os
 ROOT = "agentops/ai"
 
 
-
 def show(folder, level=0):
     if level > 3:
         return

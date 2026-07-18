@@ -1,17 +1,10 @@
 from agentops.domains.agents.execution_plan import ExecutionPlan
 from agentops.domains.agents.task import AgentTask
 
-plan = ExecutionPlan(
-    goal="Analyze Apple Inc."
-)
+plan = ExecutionPlan(goal="Analyze Apple Inc.")
 
 plan.add_task(
-    AgentTask(
-        id=1,
-        service="company",
-        action="resolve",
-        description="Resolve company"
-    )
+    AgentTask(id=1, service="company", action="resolve", description="Resolve company")
 )
 
 plan.add_task(
@@ -19,7 +12,7 @@ plan.add_task(
         id=2,
         service="finance",
         action="snapshot",
-        description="Retrieve finance snapshot"
+        description="Retrieve finance snapshot",
     )
 )
 

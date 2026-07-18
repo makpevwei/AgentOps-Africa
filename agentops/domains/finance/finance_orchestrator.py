@@ -36,7 +36,6 @@ class FinanceOrchestrator:
         """
 
         for provider in self.registry.providers():
-
             logger.info(
                 "Trying finance provider: %s",
                 provider.name,
@@ -45,7 +44,6 @@ class FinanceOrchestrator:
             result = provider.get_snapshot(company)
 
             if result.success and not result.is_empty:
-
                 logger.info(
                     "Finance provider succeeded: %s (%.2f ms)",
                     result.provider,

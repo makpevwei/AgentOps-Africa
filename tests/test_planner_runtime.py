@@ -2,9 +2,7 @@ from agentops.domains.agents.planner import Planner
 
 planner = Planner()
 
-plan = planner.create_plan(
-    "Analyze Apple Inc."
-)
+plan = planner.create_plan("Analyze Apple Inc.")
 
 print()
 
@@ -14,10 +12,6 @@ print(plan.goal)
 
 print("=" * 60)
 
-for task in plan.tasks:
 
-    print(
-        f"{task.id}. "
-        f"[{task.service}] "
-        f"{task.action}"
-    )
+for task in plan.tasks:
+    print(task.model_dump())

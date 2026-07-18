@@ -48,10 +48,7 @@ class ProviderResult(BaseModel):
 
     @property
     def has_quote(self) -> bool:
-        return (
-            self.snapshot.quote is not None
-            and self.snapshot.quote.price is not None
-        )
+        return self.snapshot.quote is not None and self.snapshot.quote.price is not None
 
     @property
     def has_fundamentals(self) -> bool:

@@ -18,57 +18,97 @@ class Planner:
     def create_plan(
         self,
         goal: str,
+        full_plan: bool = True,
     ) -> ExecutionPlan:
 
         plan = ExecutionPlan(goal=goal)
 
-        tasks = [
-            (
-                "company",
-                "resolve",
-                "Resolve company information",
-            ),
-            (
-                "finance",
-                "snapshot",
-                "Retrieve financial snapshot",
-            ),
-            (
-                "research",
-                "company_profile",
-                "Collect company profile",
-            ),
-            (
-                "research",
-                "news",
-                "Collect recent company news",
-            ),
-            (
-                "analysis",
-                "business",
-                "Run business analysis",
-            ),
-            (
-                "analysis",
-                "financial",
-                "Run financial analysis",
-            ),
-            (
-                "analysis",
-                "executive_summary",
-                "Generate executive summary",
-            ),
-        ]
+        # Temporary extraction.
+        # Later this will come from an LLM planner / entity extractor.
+        company = goal.replace("Analyze", "").replace("analyse", "").strip()
 
-        for index, task in enumerate(tasks, start=1):
-
-            plan.add_task(
-                AgentTask(
-                    id=index,
-                    service=task[0],
-                    action=task[1],
-                    description=task[2],
-                )
+        plan.add_task(
+            AgentTask(
+                id=1,
+                service="company",
+                action="resolve",
+                description="Resolve company information",
+                payload={
+                    "company": company,
+                },
             )
+        )
+
+        plan.add_task(
+            AgentTask(
+                id=2,
+                service="finance",
+                action="snapshot",
+                description="Retrieve financial snapshot",
+                payload={
+                    "company": company,
+                },
+            )
+        )
+
+        #
+        # Temporary migration mode.
+        #
+        # Until the ResearchAgentService and AnalysisAgentService
+        # are implemented, stop after the finance task.
+        #
+        if not full_plan:
+            return plan
+
+        plan.add_task(
+            AgentTask(
+                id=3,
+                service="research",
+                action="company_profile",
+                description="Collect company profile",
+                payload={
+                    "company": company,
+                },
+            )
+        )
+
+        plan.add_task(
+            AgentTask(
+                id=4,
+                service="research",
+                action="news",
+                description="Collect recent company news",
+                payload={
+                    "company": company,
+                },
+            )
+        )
+
+        plan.add_task(
+            AgentTask(
+                id=5,
+                service="analysis",
+                action="business",
+                description="Run business analysis",
+            )
+        )
+
+        plan.add_task(
+            AgentTask(
+                id=6,
+                service="analysis",
+                action="financial",
+                description="Run financial analysis",
+            )
+        )
+
+        plan.add_task(
+            AgentTask(
+                id=7,
+                service="analysis",
+                action="executive_summary",
+                description="Generate executive summary",
+            )
+        )
 
         return plan

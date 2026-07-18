@@ -3,6 +3,7 @@ import sys
 
 ROOT = sys.argv[1] if len(sys.argv) > 1 else "."
 
+
 def show(folder, level=0):
     if level > 4:
         return
@@ -25,6 +26,7 @@ def show(folder, level=0):
             show(path, level + 1)
         else:
             print(f"{indent}📄 {item}")
+
 
 print(f"\n📁 {ROOT}/")
 show(ROOT)
