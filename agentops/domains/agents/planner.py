@@ -18,13 +18,13 @@ class Planner:
     def create_plan(
         self,
         goal: str,
-        full_plan: bool = True,
     ) -> ExecutionPlan:
 
         plan = ExecutionPlan(goal=goal)
 
-        # Temporary extraction.
-        # Later this will come from an LLM planner / entity extractor.
+        #
+        # Temporary entity extraction.
+        #
         company = goal.replace("Analyze", "").replace("analyse", "").strip()
 
         plan.add_task(
@@ -51,63 +51,15 @@ class Planner:
             )
         )
 
-        #
-        # Temporary migration mode.
-        #
-        # Until the ResearchAgentService and AnalysisAgentService
-        # are implemented, stop after the finance task.
-        #
-        if not full_plan:
-            return plan
-
         plan.add_task(
             AgentTask(
                 id=3,
                 service="research",
-                action="company_profile",
-                description="Collect company profile",
+                action="research",
+                description="Collect company research",
                 payload={
                     "company": company,
                 },
-            )
-        )
-
-        plan.add_task(
-            AgentTask(
-                id=4,
-                service="research",
-                action="news",
-                description="Collect recent company news",
-                payload={
-                    "company": company,
-                },
-            )
-        )
-
-        plan.add_task(
-            AgentTask(
-                id=5,
-                service="analysis",
-                action="business",
-                description="Run business analysis",
-            )
-        )
-
-        plan.add_task(
-            AgentTask(
-                id=6,
-                service="analysis",
-                action="financial",
-                description="Run financial analysis",
-            )
-        )
-
-        plan.add_task(
-            AgentTask(
-                id=7,
-                service="analysis",
-                action="executive_summary",
-                description="Generate executive summary",
             )
         )
 

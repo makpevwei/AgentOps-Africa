@@ -8,16 +8,14 @@ from __future__ import annotations
 
 from pydantic import BaseModel, Field
 
+from agentops.domains.research.research_models import ResearchResult
+
 
 class ResearchData(BaseModel):
     """
-    Structured research collected from external sources.
+    Structured research collected by the Research Domain.
     """
 
-    company_profile: dict = Field(default_factory=dict)
-
-    news: list[dict] = Field(default_factory=list)
-
-    wikipedia: dict = Field(default_factory=dict)
-
-    web: dict = Field(default_factory=dict)
+    result: ResearchResult = Field(
+        default_factory=ResearchResult,
+    )

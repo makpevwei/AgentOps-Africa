@@ -22,9 +22,7 @@ class ResearchEngine:
     """
 
     def __init__(self) -> None:
-
         self.planner = Planner()
-
         self.executor = Executor()
 
     def build_context(
@@ -43,14 +41,10 @@ class ResearchEngine:
         )
 
         #
-        # Temporary migration mode.
-        #
-        # Build only the tasks currently supported by
-        # the Agent Runtime.
+        # Build an execution plan.
         #
         plan = self.planner.create_plan(
             f"Analyze {company_name}",
-            full_plan=False,
         )
 
         agent_context = self.executor.execute(
@@ -61,6 +55,7 @@ class ResearchEngine:
             query=company_name,
             company=agent_context.company,
             finance=agent_context.finance,
+            research=agent_context.research.result,
         )
 
         logger.info(

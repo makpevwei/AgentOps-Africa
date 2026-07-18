@@ -25,4 +25,4 @@ class FinanceSnapshot(BaseModel):
 
     history: list[PriceHistoryPoint] = Field(default_factory=list)
 
-    news: list = Field(default_factory=list)
+    news: list[dict] = Field(default_factory=list)

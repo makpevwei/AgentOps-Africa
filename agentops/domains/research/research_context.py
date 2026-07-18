@@ -8,10 +8,15 @@ between the Research Engine, AI Agents, and
 Report Builders.
 """
 
+from __future__ import annotations
+
 from pydantic import BaseModel, Field
 
 from agentops.domains.companies.models import CompanyProfile
 from agentops.domains.finance.finance_snapshot import FinanceSnapshot
+from agentops.domains.research.research_models import (
+    ResearchResult,
+)
 
 
 class ResearchContext(BaseModel):
@@ -28,8 +33,12 @@ class ResearchContext(BaseModel):
     # Financial information
     finance: FinanceSnapshot | None = None
 
-    # AI-generated analysis (to be added later)
-    research: list = Field(default_factory=list)
+    # Research gathered from providers
+    research: ResearchResult = Field(
+        default_factory=ResearchResult,
+    )
 
     # Additional metadata
-    metadata: dict = Field(default_factory=dict)
+    metadata: dict[str, object] = Field(
+        default_factory=dict,
+    )

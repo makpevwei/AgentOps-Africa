@@ -11,7 +11,7 @@ from pydantic import BaseModel, Field
 from agentops.domains.agents.models.analysis_data import AnalysisData
 from agentops.domains.agents.models.research_data import ResearchData
 from agentops.domains.companies.models import CompanyProfile
-from agentops.domains.finance.finance_models import FinanceSnapshot
+from agentops.domains.finance.finance_snapshot import FinanceSnapshot
 
 
 class AgentContext(BaseModel):
