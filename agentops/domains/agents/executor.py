@@ -1,9 +1,8 @@
 """
 Agent Execution Engine
 
-Coordinates the execution of an ExecutionPlan by dispatching
-tasks to the appropriate Agent Services and maintaining a
-shared AgentContext.
+Coordinates execution of an ExecutionPlan by dispatching
+tasks to registered Agent Services.
 """
 
 from __future__ import annotations
@@ -28,18 +27,12 @@ class Executor:
         plan: ExecutionPlan,
     ) -> AgentContext:
         """
-        Execute all tasks in the supplied execution plan.
-
-        Returns
-        -------
-        AgentContext
-            The shared execution context containing all outputs
-            produced by the executed services.
+        Execute all runnable tasks.
         """
 
         context = AgentContext()
 
-        while True:
+        while plan.has_ready_tasks:
             task = plan.next_pending_task()
 
             if task is None:
@@ -68,15 +61,33 @@ class Executor:
                 print(f"✅ Completed {task.service}:{task.action}")
 
             except Exception as ex:
-                print(f"❌ Failed {task.service}:{task.action}")
-                print(ex)
-
                 plan.mark_failed(
                     task.id,
                     str(ex),
                 )
 
-                # Stop execution on the first failure.
-                break
+                print(f"❌ Failed {task.service}:{task.action}")
+                print(ex)
+
+        #
+        # Report blocked tasks.
+        #
+        blocked = plan.blocked_tasks()
+
+        if blocked:
+            print("\n⚠ Blocked Tasks")
+
+            for task in blocked:
+                print(f"   • {task.service}:{task.action} (dependency failed)")
+
+        #
+        # Summary
+        #
+        print("\nExecution Summary")
+
+        print(f"   Total     : {plan.total_tasks}")
+        print(f"   Completed : {plan.completed_tasks}")
+        print(f"   Failed    : {plan.failed_tasks}")
+        print(f"   Pending   : {plan.pending_tasks}")
 
         return context

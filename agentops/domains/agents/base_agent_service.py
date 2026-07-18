@@ -8,6 +8,7 @@ from abc import ABC, abstractmethod
 
 from agentops.domains.agents.agent_context import AgentContext
 from agentops.domains.agents.task import AgentTask
+from agentops.domains.agents.task_result import TaskResult
 
 
 class BaseAgentService(ABC):
@@ -22,7 +23,7 @@ class BaseAgentService(ABC):
         self,
         task: AgentTask,
         context: AgentContext,
-    ) -> dict:
+    ) -> TaskResult:
         """
         Execute an AgentTask using the shared execution context.
         """
