@@ -1,4 +1,3 @@
-from agentops.domains.agents.executor import Executor
 from agentops.domains.agents.planner import Planner
 
 planner = Planner()
@@ -7,18 +6,18 @@ plan = planner.create_plan(
     "Analyze Apple Inc."
 )
 
-executor = Executor()
-
-executor.execute(plan)
-
 print()
+
+print("=" * 60)
+
+print(plan.goal)
 
 print("=" * 60)
 
 for task in plan.tasks:
 
     print(
-        task.id,
-        task.status.value,
-        task.result,
+        f"{task.id}. "
+        f"[{task.service}] "
+        f"{task.action}"
     )
