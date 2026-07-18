@@ -1,15 +1,14 @@
 from agentops.domains.companies.company_resolver import CompanyResolver
-from agentops.providers.finance.provider_factory import FinanceProviderFactory
+from agentops.domains.finance.finance_service import FinanceService
 
 
 def main():
     resolver = CompanyResolver()
+    finance = FinanceService()
 
     company = resolver.resolve("Apple")
 
-    provider = FinanceProviderFactory.create(company)
-
-    snapshot = provider.get_snapshot(company)
+    snapshot = finance.get_snapshot(company)
 
     print()
     print("=" * 60)
@@ -21,22 +20,27 @@ def main():
     print("=" * 60)
     print("QUOTE")
     print()
-    print(snapshot.quote)
-    print()
-    print(snapshot.quote.model_dump())
+
+    if snapshot.quote:
+        print(snapshot.quote)
+        print()
+        print(snapshot.quote.model_dump())
 
     print()
     print("=" * 60)
     print("FUNDAMENTALS")
     print()
-    print(snapshot.fundamentals)
-    print()
-    print(snapshot.fundamentals.model_dump())
+
+    if snapshot.fundamentals:
+        print(snapshot.fundamentals)
+        print()
+        print(snapshot.fundamentals.model_dump())
 
     print()
     print("=" * 60)
     print("PRICE HISTORY")
     print()
+
     print(f"Records: {len(snapshot.history)}")
 
     if snapshot.history:

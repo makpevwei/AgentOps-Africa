@@ -10,26 +10,32 @@ from __future__ import annotations
 from agentops.core.logger import logger
 from agentops.domains.companies.models import CompanyProfile
 from agentops.domains.finance.finance_snapshot import FinanceSnapshot
-from agentops.providers.finance.base_provider import BaseFinanceProvider
+from agentops.domains.finance.provider_registry import ProviderRegistry
 
 
 class FinanceOrchestrator:
     """
     Executes finance providers in priority order.
+
+    The orchestrator never knows which providers exist.
+    It simply asks the registry for the available providers.
     """
 
-    def __init__(
-        self,
-        providers: list[BaseFinanceProvider],
-    ):
-        self.providers = providers
+    def __init__(self) -> None:
+        self.registry = ProviderRegistry()
 
     def get_snapshot(
         self,
         company: CompanyProfile,
     ) -> FinanceSnapshot:
+        """
+        Retrieve the best available financial snapshot.
 
-        for provider in self.providers:
+        Providers are executed in priority order until one
+        successfully returns data.
+        """
+
+        for provider in self.registry.providers():
 
             logger.info(
                 "Trying finance provider: %s",
