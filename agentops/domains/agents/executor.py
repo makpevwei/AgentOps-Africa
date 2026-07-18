@@ -1,93 +1,226 @@
 """
-Agent Execution Engine
+Execution Plan
 
-Coordinates execution of an ExecutionPlan by dispatching
-tasks to registered Agent Services.
+Defines an ordered collection of agent tasks.
 """
 
 from __future__ import annotations
 
-from rich import print
+from pydantic import BaseModel, Field
 
-from agentops.domains.agents.agent_context import AgentContext
-from agentops.domains.agents.execution_plan import ExecutionPlan
-from agentops.domains.agents.service_registry import ServiceRegistry
+from agentops.domains.agents.task import AgentTask, TaskStatus
+from agentops.domains.agents.task_result import TaskResult
 
 
-class Executor:
+class ExecutionPlan(BaseModel):
     """
-    Executes an ExecutionPlan using registered Agent Services.
+    Collection of tasks representing an execution workflow.
+
+    Tasks may declare dependencies on one another, allowing the plan
+    to evolve into a Directed Acyclic Graph (DAG).
     """
 
-    def __init__(self) -> None:
-        self.registry = ServiceRegistry()
+    goal: str
 
-    def execute(
+    tasks: list[AgentTask] = Field(default_factory=list)
+
+    def add_task(
         self,
-        plan: ExecutionPlan,
-    ) -> AgentContext:
+        task: AgentTask,
+    ) -> None:
         """
-        Execute all runnable tasks.
+        Add a task to the execution plan.
+        """
+        self.tasks.append(task)
+
+    def get_task(
+        self,
+        task_id: int,
+    ) -> AgentTask | None:
+        """
+        Retrieve a task by its identifier.
+        """
+        return next(
+            (task for task in self.tasks if task.id == task_id),
+            None,
+        )
+
+    def dependencies_completed(
+        self,
+        task: AgentTask,
+    ) -> bool:
+        """
+        Returns True only if all dependencies completed successfully.
         """
 
-        context = AgentContext()
+        for dependency_id in task.depends_on:
+            dependency = self.get_task(dependency_id)
 
-        while plan.has_ready_tasks:
-            task = plan.next_pending_task()
+            if dependency is None:
+                return False
 
-            if task is None:
-                break
+            if dependency.status != TaskStatus.COMPLETED:
+                return False
 
-            print(f"\n▶ Running {task.service}:{task.action}")
+        return True
 
-            plan.mark_running(task.id)
+    def dependencies_failed(
+        self,
+        task: AgentTask,
+    ) -> bool:
+        """
+        Returns True if any dependency has failed.
+        """
 
-            try:
-                service = self.registry.get(task.service)
+        for dependency_id in task.depends_on:
+            dependency = self.get_task(dependency_id)
 
-                if service is None:
-                    raise ValueError(f"No service registered for '{task.service}'.")
+            if dependency and dependency.status == TaskStatus.FAILED:
+                return True
 
-                result = service.execute(
-                    task,
-                    context,
-                )
+        return False
 
-                plan.mark_completed(
-                    task.id,
-                    result,
-                )
+    def ready_tasks(
+        self,
+    ) -> list[AgentTask]:
+        """
+        Return all executable tasks.
+        """
 
-                print(f"✅ Completed {task.service}:{task.action}")
+        return [
+            task
+            for task in self.tasks
+            if (
+                task.status == TaskStatus.PENDING
+                and self.dependencies_completed(task)
+            )
+        ]
 
-            except Exception as ex:
-                plan.mark_failed(
-                    task.id,
-                    str(ex),
-                )
+    def blocked_tasks(
+        self,
+    ) -> list[AgentTask]:
+        """
+        Return pending tasks that can never execute because one
+        of their dependencies failed.
+        """
 
-                print(f"❌ Failed {task.service}:{task.action}")
-                print(ex)
+        return [
+            task
+            for task in self.tasks
+            if (
+                task.status == TaskStatus.PENDING
+                and self.dependencies_failed(task)
+            )
+        ]
 
-        #
-        # Report blocked tasks.
-        #
-        blocked = plan.blocked_tasks()
+    def next_pending_task(
+        self,
+    ) -> AgentTask | None:
+        """
+        Return the next executable task.
+        """
+        ready = self.ready_tasks()
 
-        if blocked:
-            print("\n⚠ Blocked Tasks")
+        return ready[0] if ready else None
 
-            for task in blocked:
-                print(f"   • {task.service}:{task.action} (dependency failed)")
+    def mark_running(
+        self,
+        task_id: int,
+    ) -> None:
+        """
+        Mark a task as running.
+        """
+        if task := self.get_task(task_id):
+            task.status = TaskStatus.RUNNING
 
-        #
-        # Summary
-        #
-        print("\nExecution Summary")
+    def mark_completed(
+        self,
+        task_id: int,
+        result: TaskResult,
+    ) -> None:
+        """
+        Mark a task as completed.
+        """
+        if task := self.get_task(task_id):
+            task.status = TaskStatus.COMPLETED
+            task.result = result
 
-        print(f"   Total     : {plan.total_tasks}")
-        print(f"   Completed : {plan.completed_tasks}")
-        print(f"   Failed    : {plan.failed_tasks}")
-        print(f"   Pending   : {plan.pending_tasks}")
+    def mark_failed(
+        self,
+        task_id: int,
+        error: str,
+    ) -> None:
+        """
+        Mark a task as failed.
+        """
+        if task := self.get_task(task_id):
+            task.status = TaskStatus.FAILED
+            task.error = error
 
-        return context
+    @property
+    def total_tasks(self) -> int:
+        """Total number of tasks."""
+        return len(self.tasks)
+
+    @property
+    def completed_tasks(self) -> int:
+        """Number of completed tasks."""
+        return sum(
+            task.status == TaskStatus.COMPLETED
+            for task in self.tasks
+        )
+
+    @property
+    def failed_tasks(self) -> int:
+        """Number of failed tasks."""
+        return sum(
+            task.status == TaskStatus.FAILED
+            for task in self.tasks
+        )
+
+    @property
+    def running_tasks(self) -> int:
+        """Number of running tasks."""
+        return sum(
+            task.status == TaskStatus.RUNNING
+            for task in self.tasks
+        )
+
+    @property
+    def pending_tasks(self) -> int:
+        """Number of pending tasks."""
+        return sum(
+            task.status == TaskStatus.PENDING
+            for task in self.tasks
+        )
+
+    @property
+    def has_ready_tasks(self) -> bool:
+        """
+        Returns True if there are executable tasks.
+        """
+        return bool(self.ready_tasks())
+
+    @property
+    def successful(self) -> bool:
+        """
+        Returns True when every task completed successfully.
+        """
+        return (
+            self.completed_tasks == self.total_tasks
+            and self.failed_tasks == 0
+        )
+
+    @property
+    def is_failed(self) -> bool:
+        """
+        Returns True if one or more tasks failed.
+        """
+        return self.failed_tasks > 0
+
+    @property
+    def is_complete(self) -> bool:
+        """
+        Workflow is complete when there are no runnable tasks left.
+        """
+        return not self.has_ready_tasks

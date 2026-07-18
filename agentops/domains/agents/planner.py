@@ -19,17 +19,20 @@ class Planner:
         self,
         goal: str,
     ) -> ExecutionPlan:
+        """
+        Build an execution plan for the supplied goal.
+        """
 
         plan = ExecutionPlan(goal=goal)
 
-        #
         # Temporary entity extraction.
-        #
-        company = goal.replace("Analyze", "").replace("analyse", "").strip()
+        company = (
+            goal.replace("Analyze", "")
+            .replace("analyse", "")
+            .strip()
+        )
 
-        #
-        # 1. Resolve Company
-        #
+        # Resolve company.
         plan.add_task(
             AgentTask(
                 id=1,
@@ -43,9 +46,7 @@ class Planner:
             )
         )
 
-        #
-        # 2. Finance
-        #
+        # Retrieve financial data.
         plan.add_task(
             AgentTask(
                 id=2,
@@ -60,9 +61,7 @@ class Planner:
             )
         )
 
-        #
-        # 3. Research
-        #
+        # Collect company research.
         plan.add_task(
             AgentTask(
                 id=3,
@@ -76,18 +75,5 @@ class Planner:
                 },
             )
         )
-
-        #
-        # Future
-        #
-        # plan.add_task(
-        #     AgentTask(
-        #         id=4,
-        #         name="analyze_company",
-        #         service="analysis",
-        #         action="analyze",
-        #         depends_on=[2, 3],
-        #     )
-        # )
 
         return plan
