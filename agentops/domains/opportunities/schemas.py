@@ -4,6 +4,8 @@ Opportunity API Schemas
 Request and response models for the Opportunity API.
 """
 
+from datetime import datetime
+
 from pydantic import BaseModel, ConfigDict, Field
 
 from .models import (
@@ -80,9 +82,9 @@ class OpportunityResponse(BaseModel):
 
     assigned_agent: str | None = None
 
-    created_at: str
+    created_at: datetime
 
-    updated_at: str
+    updated_at: datetime
 
 
 class OpportunitySummary(BaseModel):

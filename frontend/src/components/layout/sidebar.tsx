@@ -7,9 +7,13 @@ export function Sidebar() {
   return (
     <aside className="w-64 border-r bg-background">
       <div className="p-6">
-        <h1 className="text-xl font-bold">
-          AgentOps Enterprise
+        <h1 className="text-xl font-bold tracking-tight">
+          AgentOps
         </h1>
+
+        <p className="text-sm text-muted-foreground">
+          AI Workforce Platform
+        </p>
       </div>
 
       <nav className="px-3">

@@ -1,9 +1,11 @@
 import {
+  Bot,
+  Briefcase,
+  Building2,
+  FileSpreadsheet,
+  FileText,
   LayoutDashboard,
   Search,
-  MessageSquare,
-  FolderKanban,
-  FileText,
   Settings,
 } from "lucide-react";
 
@@ -14,24 +16,34 @@ export const navigation = [
     icon: LayoutDashboard,
   },
   {
+    name: "AI Employees",
+    href: "/employees",
+    icon: Bot,
+  },
+  {
+    name: "Opportunities",
+    href: "/opportunities",
+    icon: Briefcase,
+  },
+  {
+    name: "Companies",
+    href: "/companies",
+    icon: Building2,
+  },
+  {
     name: "Research",
     href: "/research",
     icon: Search,
   },
   {
-    name: "Chat",
-    href: "/chat",
-    icon: MessageSquare,
-  },
-  {
-    name: "Projects",
-    href: "/projects",
-    icon: FolderKanban,
-  },
-  {
-    name: "Documents",
-    href: "/documents",
+    name: "Proposals",
+    href: "/proposals",
     icon: FileText,
+  },
+  {
+    name: "Quotations",
+    href: "/quotations",
+    icon: FileSpreadsheet,
   },
   {
     name: "Settings",
