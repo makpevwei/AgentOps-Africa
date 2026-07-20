@@ -7,6 +7,7 @@ requires-python = ">=3.12"
 
 dependencies = [
     "alembic>=1.18.5",
+    "argon2-cffi>=25.1.0",
     "asyncpg>=0.31.0",
     "deepagents",
     "email-validator>=2.3.0",
@@ -21,7 +22,7 @@ dependencies = [
     "langchain-groq",
     "langchain-mcp-adapters",
     "langchain-openai",
-    "pwdlib>=0.3.0",
+    "pwdlib[argon2]>=0.3.0",
     "pydantic",
     "pydantic-settings",
     "pypdf",
@@ -59,3 +60,8 @@ select = [
     "UP",  # pyupgrade
     "B",   # bugbear
 ]
+
+ignore = ["B008"]
+
+[tool.ruff.lint.per-file-ignores]
+"migrations/*" = ["E501"]

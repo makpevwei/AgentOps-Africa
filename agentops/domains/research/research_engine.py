@@ -52,7 +52,7 @@ class ResearchEngine:
             query=company_name,
             company=agent_context.company,
             finance=agent_context.finance,
-            research=agent_context.research.result,
+            research=agent_context.research,
         )
 
         duration = perf_counter() - started

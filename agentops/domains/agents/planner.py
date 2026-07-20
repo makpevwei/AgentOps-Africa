@@ -26,11 +26,7 @@ class Planner:
         plan = ExecutionPlan(goal=goal)
 
         # Temporary entity extraction.
-        company = (
-            goal.replace("Analyze", "")
-            .replace("analyse", "")
-            .strip()
-        )
+        company = goal.replace("Analyze", "").replace("analyse", "").strip()
 
         # Resolve company.
         plan.add_task(

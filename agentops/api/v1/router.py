@@ -1,13 +1,16 @@
 from fastapi import APIRouter
 
+from agentops.api.v1.endpoints.auth import router as auth_router
 from agentops.api.v1.endpoints.chat import router as chat_router
 from agentops.api.v1.endpoints.health import router as health_router
+from agentops.api.v1.endpoints.opportunities import (
+    router as opportunities_router,
+)
 from agentops.api.v1.endpoints.research import router as research_router
 
 api_router = APIRouter()
 
-
-# Health & Monitoring
+# Health
 api_router.include_router(
     health_router,
     tags=["Health"],
@@ -23,4 +26,16 @@ api_router.include_router(
 api_router.include_router(
     research_router,
     tags=["Research"],
+)
+
+# Authentication
+api_router.include_router(
+    auth_router,
+    tags=["Authentication"],
+)
+
+# Opportunities
+api_router.include_router(
+    opportunities_router,
+    tags=["Opportunities"],
 )

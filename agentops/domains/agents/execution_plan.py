@@ -1,7 +1,7 @@
 """
 Execution Plan
 
-Defines an ordered collection of agent tasks.
+Defines an ordered collection of agent tasks and their execution state.
 """
 
 from __future__ import annotations
@@ -14,10 +14,7 @@ from agentops.domains.agents.task_result import TaskResult
 
 class ExecutionPlan(BaseModel):
     """
-    Collection of tasks representing an execution workflow.
-
-    Tasks may declare dependencies on one another, allowing the plan
-    to evolve into a Directed Acyclic Graph (DAG).
+    Represents a workflow of dependent tasks.
     """
 
     goal: str
@@ -28,12 +25,14 @@ class ExecutionPlan(BaseModel):
         self,
         task: AgentTask,
     ) -> None:
+        """Add a task to the execution plan."""
         self.tasks.append(task)
 
     def get_task(
         self,
         task_id: int,
     ) -> AgentTask | None:
+        """Retrieve a task by ID."""
         return next(
             (task for task in self.tasks if task.id == task_id),
             None,
@@ -43,67 +42,42 @@ class ExecutionPlan(BaseModel):
         self,
         task: AgentTask,
     ) -> bool:
-        """
-        Returns True only if all dependencies completed successfully.
-        """
+        """Return True if all dependencies completed successfully."""
 
-        for dependency_id in task.depends_on:
-            dependency = self.get_task(dependency_id)
-
-            if dependency is None:
-                return False
-
-            if dependency.status != TaskStatus.COMPLETED:
-                return False
-
-        return True
+        return all(
+            (dependency := self.get_task(dependency_id)) is not None
+            and dependency.status == TaskStatus.COMPLETED
+            for dependency_id in task.depends_on
+        )
 
     def dependencies_failed(
         self,
         task: AgentTask,
     ) -> bool:
+        """Return True if any dependency failed."""
+
+        return any(
+            (dependency := self.get_task(dependency_id)) is not None
+            and dependency.status == TaskStatus.FAILED
+            for dependency_id in task.depends_on
+        )
+
+    def ready_tasks(self) -> list[AgentTask]:
         """
-        Returns True if any dependency has failed.
-        """
-
-        for dependency_id in task.depends_on:
-            dependency = self.get_task(dependency_id)
-
-            if dependency and dependency.status == TaskStatus.FAILED:
-                return True
-
-        return False
-
-    def ready_tasks(
-        self,
-    ) -> list[AgentTask]:
-        """
-        Return all executable tasks.
+        Return every task that is ready to execute.
         """
 
         return [
             task
             for task in self.tasks
-            if (task.status == TaskStatus.PENDING and self.dependencies_completed(task))
+            if task.status == TaskStatus.PENDING and self.dependencies_completed(task)
         ]
 
-    def blocked_tasks(
-        self,
-    ) -> list[AgentTask]:
+    def next_task(self) -> AgentTask | None:
         """
-        Return pending tasks that can never execute because one
-        of their dependencies failed.
+        Return the next executable task.
         """
 
-        return [
-            task
-            for task in self.tasks
-            if (task.status == TaskStatus.PENDING and self.dependencies_failed(task))
-        ]
-
-    def next_pending_task(
-        self,
-    ) -> AgentTask | None:
         ready = self.ready_tasks()
 
         return ready[0] if ready else None
@@ -112,7 +86,11 @@ class ExecutionPlan(BaseModel):
         self,
         task_id: int,
     ) -> None:
-        if task := self.get_task(task_id):
+        """Mark a task as running."""
+
+        task = self.get_task(task_id)
+
+        if task:
             task.status = TaskStatus.RUNNING
 
     def mark_completed(
@@ -120,7 +98,11 @@ class ExecutionPlan(BaseModel):
         task_id: int,
         result: TaskResult,
     ) -> None:
-        if task := self.get_task(task_id):
+        """Mark a task as completed."""
+
+        task = self.get_task(task_id)
+
+        if task:
             task.status = TaskStatus.COMPLETED
             task.result = result
 
@@ -129,7 +111,11 @@ class ExecutionPlan(BaseModel):
         task_id: int,
         error: str,
     ) -> None:
-        if task := self.get_task(task_id):
+        """Mark a task as failed."""
+
+        task = self.get_task(task_id)
+
+        if task:
             task.status = TaskStatus.FAILED
             task.error = error
 
@@ -150,13 +136,20 @@ class ExecutionPlan(BaseModel):
         return sum(task.status == TaskStatus.PENDING for task in self.tasks)
 
     @property
-    def has_ready_tasks(self) -> bool:
-        return bool(self.ready_tasks())
+    def running_tasks(self) -> int:
+        return sum(task.status == TaskStatus.RUNNING for task in self.tasks)
 
     @property
     def is_complete(self) -> bool:
         """
-        Workflow is complete when there are no runnable tasks left.
+        The workflow is complete when every task has either
+        completed successfully or failed.
         """
 
-        return not self.has_ready_tasks
+        return (self.completed_tasks + self.failed_tasks) == self.total_tasks
+
+    @property
+    def successful(self) -> bool:
+        """Return True when every task completed successfully."""
+
+        return self.completed_tasks == self.total_tasks and self.failed_tasks == 0

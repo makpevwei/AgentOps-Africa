@@ -15,9 +15,13 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(
-    title="AfriAgent Studio API",
-    description="Enterprise AI Workspace for Research, Business Analysis, Proposal Writing, and AI Assistants.",
-    version="1.0.0",
+    title="AgentOps Africa API",
+    description=(
+        "AI Workforce Platform for African Businesses. "
+        "Research, Opportunity Management, Proposal Generation, "
+        "Executive Assistants, Finance AI Employees and Enterprise Automation."
+    ),
+    version="0.1.0",
     lifespan=lifespan,
 )
 
