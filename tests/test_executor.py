@@ -1,53 +1,55 @@
-from rich import print
-
 from agentops.domains.agents.execution_plan import ExecutionPlan
 from agentops.domains.agents.executor import Executor
-from agentops.domains.agents.task import AgentTask
+from agentops.domains.agents.task import AgentTask, TaskStatus
+from agentops.domains.agents.task_result import TaskResult
 
 
-def main():
+class FakeAgent:
+    def execute(self, task, context):
+        return TaskResult(
+            success=True,
+            provider="FakeAgent",
+            output={"message": "ok"},
+        )
 
-    plan = ExecutionPlan(
-        goal="Analyze Apple",
-    )
+
+class FakeRegistry:
+    def get(self, service):
+        return FakeAgent()
+
+
+def test_executor_executes_task():
+    executor = Executor()
+
+    # Replace the real registry
+    executor.registry = FakeRegistry()
+
+    plan = ExecutionPlan(goal="Test Execution")
 
     plan.add_task(
         AgentTask(
             id=1,
-            service="company",
-            action="resolve",
-            description="Resolve company",
-            payload={
-                "company": "Apple",
-            },
+            name="Test Task",
+            service="research",
+            action="company_profile",
+            description="Test",
+            payload={},
+            depends_on=[],
         )
     )
-
-    plan.add_task(
-        AgentTask(
-            id=2,
-            service="finance",
-            action="snapshot",
-            description="Retrieve finance snapshot",
-        )
-    )
-
-    executor = Executor()
 
     context = executor.execute(plan)
 
-    print()
-    print("=" * 60)
-    print("Execution Plan")
-    print("=" * 60)
-    print(plan.model_dump())
+    assert context.successful is True
+    assert context.completed_tasks == [1]
 
-    print()
-    print("=" * 60)
-    print("Agent Context")
-    print("=" * 60)
-    print(context.model_dump())
+    task = plan.tasks[0]
 
+    assert task.status == TaskStatus.COMPLETED
+    assert task.is_complete is True
+    assert task.is_failed is False
 
-if __name__ == "__main__":
-    main()
+    assert task.result is not None
+    assert task.result.success is True
+    assert task.result.provider == "FakeAgent"
+    assert task.result.output == {"message": "ok"}

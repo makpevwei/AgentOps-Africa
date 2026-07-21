@@ -4,8 +4,8 @@ Company Agent Service
 
 from __future__ import annotations
 
-from agentops.domains.agents.agent_context import AgentContext
 from agentops.domains.agents.base_agent_service import BaseAgentService
+from agentops.domains.agents.execution_context import ExecutionContext
 from agentops.domains.agents.task import AgentTask
 from agentops.domains.agents.task_result import TaskResult
 from agentops.domains.companies.company_service import CompanyService
@@ -24,7 +24,7 @@ class CompanyAgentService(BaseAgentService):
     def execute(
         self,
         task: AgentTask,
-        context: AgentContext,
+        context: ExecutionContext,
     ) -> TaskResult:
         """
         Resolve the company and store it in the shared context.

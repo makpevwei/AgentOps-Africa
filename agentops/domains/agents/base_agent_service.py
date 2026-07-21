@@ -6,7 +6,7 @@ from __future__ import annotations
 
 from abc import ABC, abstractmethod
 
-from agentops.domains.agents.agent_context import AgentContext
+from agentops.domains.agents.execution_context import ExecutionContext
 from agentops.domains.agents.task import AgentTask
 from agentops.domains.agents.task_result import TaskResult
 
@@ -22,7 +22,7 @@ class BaseAgentService(ABC):
     def execute(
         self,
         task: AgentTask,
-        context: AgentContext,
+        context: ExecutionContext,
     ) -> TaskResult:
         """
         Execute an AgentTask using the shared execution context.

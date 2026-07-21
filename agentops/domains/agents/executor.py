@@ -64,10 +64,7 @@ class Executor:
 
                 plan.mark_completed(
                     task.id,
-                    TaskResult(
-                        success=True,
-                        output=result,
-                    ),
+                    result,
                 )
 
             except Exception:

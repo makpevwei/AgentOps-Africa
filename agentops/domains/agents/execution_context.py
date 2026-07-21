@@ -1,7 +1,7 @@
 """
 Execution Context
 
-Holds the accumulated results produced while executing an execution plan.
+Shared runtime context used by all agent services.
 """
 
 from __future__ import annotations
@@ -10,20 +10,26 @@ from typing import Any
 
 from pydantic import BaseModel, Field
 
+from agentops.domains.agents.models.analysis_data import AnalysisData
+from agentops.domains.agents.models.research_data import ResearchData
+from agentops.domains.companies.models import CompanyProfile
+from agentops.domains.finance.finance_snapshot import FinanceSnapshot
+
 
 class ExecutionContext(BaseModel):
     """
-    Shared state produced during execution.
-
-    Each agent writes its output into this context so later
-    tasks can consume previous results.
+    Shared runtime context.
     """
 
-    company: Any | None = None
+    company: CompanyProfile | None = None
 
-    finance: Any | None = None
+    finance: FinanceSnapshot | None = None
 
-    research: Any | None = None
+    research: ResearchData = Field(default_factory=ResearchData)
+
+    analysis: AnalysisData = Field(default_factory=AnalysisData)
+
+    summary: str | None = None
 
     metadata: dict[str, Any] = Field(default_factory=dict)
 
@@ -36,46 +42,26 @@ class ExecutionContext(BaseModel):
         service: str,
         result: Any,
     ) -> None:
-        """
-        Store the result for a service.
-        """
-
         setattr(self, service, result)
 
     def get_result(
         self,
         service: str,
     ) -> Any:
-        """
-        Retrieve the result produced by a service.
-        """
-
         return getattr(self, service, None)
 
     def add_error(
         self,
         error: str,
     ) -> None:
-        """
-        Record an execution error.
-        """
-
         self.errors.append(error)
 
     def mark_completed(
         self,
         task_id: int,
     ) -> None:
-        """
-        Record a completed task.
-        """
-
         self.completed_tasks.append(task_id)
 
     @property
     def successful(self) -> bool:
-        """
-        True when no execution errors occurred.
-        """
-
         return not self.errors
