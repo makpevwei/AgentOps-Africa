@@ -1,42 +1,54 @@
 """
 Agent Service
 
-Coordinates AI interactions.
+Coordinates AI interactions using the Workflow Runtime.
 """
 
 from agentops.core.logger import logger
 from agentops.domains.agents.agent_result import AgentResult
 from agentops.domains.agents.planner import Planner
-from agentops.domains.agents.registry import AgentRegistry
+from agentops.domains.workflows.workflow_executor import WorkflowExecutor
 
 
 class AgentService:
     """
-    Coordinates AI workers.
+    Coordinates AI requests using the Workflow Runtime.
     """
 
     def __init__(
         self,
         planner: Planner | None = None,
-        registry: AgentRegistry | None = None,
+        workflow_executor: WorkflowExecutor | None = None,
     ) -> None:
         self.planner = planner or Planner()
-        self.registry = registry or AgentRegistry()
+        self.workflow_executor = workflow_executor or WorkflowExecutor()
 
     def chat(
         self,
         message: str,
     ) -> AgentResult:
+
         logger.info("Processing chat request: %s", message)
 
-        agent_type = self.planner.decide(message)
+        workflow = self.planner.create_workflow(message)
 
-        logger.info("Planner selected agent: %s", agent_type)
+        logger.info(
+            "Planner created workflow: %s",
+            workflow.name,
+        )
 
-        agent = self.registry.get(agent_type)
+        context = self.workflow_executor.execute(
+            workflow=workflow,
+            goal=message,
+        )
 
-        result = agent.execute(message)
+        logger.info("Workflow completed successfully.")
 
-        logger.info("Agent completed successfully.")
-
-        return result
+        #
+        # Temporary compatibility adapter
+        #
+        return AgentResult(
+            agent="workflow",
+            message="Workflow completed successfully.",
+            data=context,
+        )

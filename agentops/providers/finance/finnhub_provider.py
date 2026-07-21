@@ -28,7 +28,6 @@ from agentops.domains.finance.finance_snapshot import FinanceSnapshot
 from agentops.domains.finance.provider_result import ProviderResult
 from agentops.providers.finance.base_provider import BaseFinanceProvider
 
-timestamp = datetime.now(UTC)
 
 
 class FinnhubProvider(BaseFinanceProvider):
@@ -89,7 +88,7 @@ class FinnhubProvider(BaseFinanceProvider):
                 change_percent=quote_data.get("dp"),
                 market_cap=profile.get("marketCapitalization"),
                 volume=quote_data.get("v"),
-                timestamp=datetime.utcnow(),
+                timestamp=datetime.now(UTC),
             )
 
             fundamentals = CompanyFundamentals(
