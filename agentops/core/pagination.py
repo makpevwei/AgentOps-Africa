@@ -57,7 +57,7 @@ class Page(BaseModel, Generic[T]):
         total: int,
         page: int,
         page_size: int,
-    ) -> "Page[T]":
+    ) -> Page[T]:
         """Create a paginated response."""
 
         total_pages = max(

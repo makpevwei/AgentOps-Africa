@@ -1,11 +1,22 @@
+import {
+  AssistantPrompt,
+  PipelineSummary,
+  QuickActions,
+  RecentActivity,
+} from "@/features/dashboard";
+
 export default function DashboardPage() {
   return (
-    <main className="p-8">
-      <h1 className="text-3xl font-bold">AgentOps Enterprise</h1>
+    <div className="space-y-8">
+      <AssistantPrompt />
 
-      <p className="mt-3 text-muted-foreground">
-        Welcome to your AI Workspace.
-      </p>
-    </main>
+      <QuickActions />
+
+      <div className="grid gap-6 lg:grid-cols-2">
+        <RecentActivity />
+
+        <PipelineSummary />
+      </div>
+    </div>
   );
 }

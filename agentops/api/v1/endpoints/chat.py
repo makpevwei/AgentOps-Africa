@@ -31,7 +31,7 @@ async def chat(
     Process a user message and return an AI-generated response.
     """
     try:
-        response = await service.chat(request.message)
+        response = service.chat(request.message)
 
         return ChatResponse(
             response=response,

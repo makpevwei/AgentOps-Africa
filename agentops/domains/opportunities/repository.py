@@ -51,5 +51,3 @@ class OpportunityRepository(ABC):
     ) -> list[Opportunity]:
         """List opportunities for an organization."""
         ...
-
-   

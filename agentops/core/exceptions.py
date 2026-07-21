@@ -19,6 +19,7 @@ class AgentOpsException(Exception):
 # Business Exceptions
 # ============================================================
 
+
 class NotFoundException(AgentOpsException):
     """Raised when a requested resource cannot be found."""
 
@@ -42,6 +43,7 @@ class AuthorizationException(AgentOpsException):
 # ============================================================
 # AI / Provider Exceptions
 # ============================================================
+
 
 class AIException(AgentOpsException):
     """Base exception for AI-related operations."""

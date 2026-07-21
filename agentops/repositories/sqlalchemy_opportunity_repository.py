@@ -1,6 +1,7 @@
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from agentops.core.exceptions import NotFoundException
 from agentops.db.models.opportunity import Opportunity as OpportunityModel
 from agentops.domains.opportunities.models import Opportunity
 from agentops.domains.opportunities.repository import OpportunityRepository
@@ -79,16 +80,14 @@ class SQLAlchemyOpportunityRepository(OpportunityRepository):
         self,
         opportunity: Opportunity,
     ) -> Opportunity:
-        stmt = select(OpportunityModel).where(
-            OpportunityModel.id == opportunity.id
-        )
+        stmt = select(OpportunityModel).where(OpportunityModel.id == opportunity.id)
 
         result = await self.db.execute(stmt)
 
         model = result.scalar_one_or_none()
 
         if model is None:
-            raise ValueError("Opportunity not found")
+            raise NotFoundException("Opportunity not found")
 
         model.title = opportunity.title
         model.description = opportunity.description
