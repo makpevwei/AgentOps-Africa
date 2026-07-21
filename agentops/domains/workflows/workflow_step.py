@@ -1,9 +1,3 @@
-"""
-Workflow Step
-
-Represents a single step within a workflow.
-"""
-
 from __future__ import annotations
 
 from dataclasses import dataclass, field
@@ -11,13 +5,10 @@ from dataclasses import dataclass, field
 
 @dataclass(slots=True)
 class WorkflowStep:
-    """
-    A single executable workflow step.
-    """
-
-    id: str
+    id: int
     name: str
     service: str
+    action: str
     description: str = ""
-    depends_on: list[str] = field(default_factory=list)
+    depends_on: list[int] = field(default_factory=list)
     payload: dict = field(default_factory=dict)

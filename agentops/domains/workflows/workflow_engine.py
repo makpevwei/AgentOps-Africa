@@ -33,6 +33,8 @@ class WorkflowEngine:
                     id=step.id,
                     name=step.name,
                     service=step.service,
+                    action=step.action,
+                    description=step.description,
                     payload=step.payload,
                     depends_on=step.depends_on,
                 )

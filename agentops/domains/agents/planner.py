@@ -102,27 +102,24 @@ class Planner:
         self,
         message: str,
     ) -> ExecutionPlan:
+        """
+        Backward compatibility for legacy callers.
+        """
 
         workflow = self.create_workflow(message)
 
         plan = ExecutionPlan(goal=message)
 
-        id_map: dict[str, int] = {}
-
-        # First pass: assign numeric ids
-        for index, step in enumerate(workflow.steps, start=1):
-            id_map[step.id] = index
-
-        # Second pass: build tasks
-        for index, step in enumerate(workflow.steps, start=1):
+        for step in workflow.steps:
             plan.add_task(
                 AgentTask(
-                    id=index,
+                    id=step.id,
                     name=step.name,
                     service=step.service,
-                    action=step.name.lower().replace(" ", "_"),
+                    action=step.action,
                     description=step.description,
-                    depends_on=[id_map[d] for d in step.depends_on],
+                    payload=step.payload,
+                    depends_on=step.depends_on,
                 )
             )
 
@@ -142,24 +139,28 @@ class Planner:
             description="Research a company",
             steps=[
                 WorkflowStep(
-                    id="company",
+                    id=1,
                     name="Resolve Company",
                     service="company",
+                    action="resolve_company",
                     description="Resolve company information",
+                    payload={"query": message},
                 ),
                 WorkflowStep(
-                    id="research",
+                    id=2,
                     name="Research Company",
                     service="research",
+                    action="company_profile",
                     description="Research company",
-                    depends_on=["company"],
+                    depends_on=[1],
                 ),
                 WorkflowStep(
-                    id="finance",
+                    id=3,
                     name="Financial Snapshot",
                     service="finance",
+                    action="financial_snapshot",
                     description="Collect financial data",
-                    depends_on=["company"],
+                    depends_on=[1],
                 ),
             ],
         )
@@ -174,17 +175,20 @@ class Planner:
             description="Financial analysis",
             steps=[
                 WorkflowStep(
-                    id="company",
+                    id=1,
                     name="Resolve Company",
                     service="company",
+                    action="resolve_company",
                     description="Resolve company",
+                    payload={"query": message},
                 ),
                 WorkflowStep(
-                    id="finance",
+                    id=2,
                     name="Financial Snapshot",
                     service="finance",
+                    action="financial_snapshot",
                     description="Collect financial data",
-                    depends_on=["company"],
+                    depends_on=[1],
                 ),
             ],
         )
@@ -197,7 +201,16 @@ class Planner:
         return Workflow(
             name="Proposal Workflow",
             description="Generate proposal",
-            steps=[],
+            steps=[
+                WorkflowStep(
+                    id=1,
+                    name="Generate Proposal",
+                    service="proposal",
+                    action="generate_proposal",
+                    description="Generate proposal",
+                    payload={"request": message},
+                ),
+            ],
         )
 
     def _general_workflow(
@@ -208,5 +221,14 @@ class Planner:
         return Workflow(
             name="General Workflow",
             description="General assistant",
-            steps=[],
+            steps=[
+                WorkflowStep(
+                    id=1,
+                    name="General Response",
+                    service="general",
+                    action="general_response",
+                    description="Respond to the user",
+                    payload={"message": message},
+                ),
+            ],
         )
