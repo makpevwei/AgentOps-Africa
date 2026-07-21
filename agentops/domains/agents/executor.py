@@ -20,7 +20,6 @@ class Executor:
 
     def __init__(self) -> None:
         self.registry = ServiceRegistry()
-        
 
     def execute(
         self,

@@ -82,6 +82,14 @@ class ExecutionPlan(BaseModel):
 
         return ready[0] if ready else None
 
+    def next_pending_task(self):
+        """
+        Backward compatibility.
+
+        Use next_task() for new code.
+        """
+        return self.next_task()
+
     def mark_running(
         self,
         task_id: int,

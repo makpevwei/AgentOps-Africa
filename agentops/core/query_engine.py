@@ -31,9 +31,7 @@ class QueryEngine:
                 continue
 
             if hasattr(model, field):
-                statement = statement.where(
-                    getattr(model, field) == value
-                )
+                statement = statement.where(getattr(model, field) == value)
 
         return statement
 
@@ -93,11 +91,7 @@ class QueryEngine:
 
         offset = (specification.page - 1) * specification.page_size
 
-        return (
-            statement
-            .offset(offset)
-            .limit(specification.page_size)
-        )
+        return statement.offset(offset).limit(specification.page_size)
 
     @staticmethod
     def count_statement(

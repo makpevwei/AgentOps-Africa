@@ -2,7 +2,5 @@ from abc import ABC, abstractmethod
 
 
 class BaseLLMProvider(ABC):
-
     @abstractmethod
-    async def chat(self, prompt: str) -> str:
-        ...
+    async def chat(self, prompt: str) -> str: ...

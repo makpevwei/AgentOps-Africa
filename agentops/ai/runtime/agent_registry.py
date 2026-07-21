@@ -21,9 +21,7 @@ class AgentRegistry:
         Register an agent.
         """
 
-        self._agents[
-            agent.metadata.agent_id
-        ] = agent
+        self._agents[agent.metadata.agent_id] = agent
 
     def get(
         self,
@@ -31,9 +29,7 @@ class AgentRegistry:
     ) -> BaseAgent:
 
         if agent_id not in self._agents:
-            raise KeyError(
-                f"Agent '{agent_id}' is not registered."
-            )
+            raise KeyError(f"Agent '{agent_id}' is not registered.")
 
         return self._agents[agent_id]
 
@@ -55,9 +51,7 @@ class AgentRegistry:
         self,
     ) -> list[str]:
 
-        return sorted(
-            self._agents.keys()
-        )
+        return sorted(self._agents.keys())
 
 
 agent_registry = AgentRegistry()

@@ -21,4 +21,3 @@ class AgentResult:
     execution_time: float = 0.0
 
     metadata: dict[str, Any] = field(default_factory=dict)
-    

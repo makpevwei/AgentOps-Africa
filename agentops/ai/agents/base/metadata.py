@@ -16,5 +16,5 @@ class AgentMetadata:
     version: str = "1.0.0"
 
     capabilities: tuple[Capability, ...] = ()
-    
+
     tags: tuple[str, ...] = ()

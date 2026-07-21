@@ -14,7 +14,7 @@ Responsibilities
 
 from __future__ import annotations
 
-from datetime import datetime
+from datetime import UTC, datetime
 from time import perf_counter
 
 from agentops.clients.finnhub_client import FinnhubClient
@@ -27,6 +27,8 @@ from agentops.domains.finance.finance_models import (
 from agentops.domains.finance.finance_snapshot import FinanceSnapshot
 from agentops.domains.finance.provider_result import ProviderResult
 from agentops.providers.finance.base_provider import BaseFinanceProvider
+
+timestamp = datetime.now(UTC)
 
 
 class FinnhubProvider(BaseFinanceProvider):

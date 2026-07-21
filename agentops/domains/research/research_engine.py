@@ -20,9 +20,19 @@ class ResearchEngine:
     company research using the Agent Runtime.
     """
 
-    def __init__(self) -> None:
-        self.planner: Planner = Planner()
-        self.executor: Executor = Executor()
+    def __init__(
+        self,
+        company_service=None,
+        finance_service=None,
+    ) -> None:
+
+        # Legacy compatibility
+        self.company_service = company_service
+        self.finance_service = finance_service
+
+        # New runtime
+        self.planner = Planner()
+        self.executor = Executor()
 
     def build_context(
         self,
@@ -39,15 +49,33 @@ class ResearchEngine:
             company_name,
         )
 
-        # Create an execution plan.
+        #
+        # -----------------------------------------------------------------
+        # Legacy compatibility path
+        # -----------------------------------------------------------------
+        #
+        if self.company_service is not None and self.finance_service is not None:
+            company = self.company_service.resolve(company_name)
+            finance = self.finance_service.get_snapshot(company)
+
+            return ResearchContext(
+                query=company_name,
+                company=company,
+                finance=finance,
+            )
+
+        #
+        # -----------------------------------------------------------------
+        # New runtime
+        # -----------------------------------------------------------------
+        #
+
         plan = self.planner.create_plan(
             f"Analyze {company_name}",
         )
 
-        # Execute the plan.
         agent_context = self.executor.execute(plan)
 
-        # Build the research context returned to callers.
         context = ResearchContext(
             query=company_name,
             company=agent_context.company,
