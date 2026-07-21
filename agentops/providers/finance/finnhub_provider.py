@@ -29,7 +29,6 @@ from agentops.domains.finance.provider_result import ProviderResult
 from agentops.providers.finance.base_provider import BaseFinanceProvider
 
 
-
 class FinnhubProvider(BaseFinanceProvider):
     """
     Finnhub implementation of BaseFinanceProvider.

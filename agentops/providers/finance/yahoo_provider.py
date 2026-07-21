@@ -5,7 +5,7 @@ Retrieves all available financial information from
 Yahoo Finance in a single provider session.
 """
 
-from datetime import datetime
+from datetime import UTC, datetime
 
 from agentops.clients.yahoo_client import YahooClient
 from agentops.core.logger import logger
@@ -49,7 +49,7 @@ class YahooFinanceProvider(BaseFinanceProvider):
             change_percent=info.get("regularMarketChangePercent"),
             market_cap=info.get("marketCap"),
             volume=info.get("volume"),
-            timestamp=datetime.utcnow(),
+            timestamp=datetime.now(UTC),
         )
 
         fundamentals = CompanyFundamentals(

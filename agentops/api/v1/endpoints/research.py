@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import UTC, datetime
 from time import perf_counter
 
 from fastapi import APIRouter, HTTPException
@@ -39,7 +39,7 @@ def research_company(
             country=context.company.country,
             ticker=context.company.ticker,
             execution_time=execution_time,
-            generated_at=datetime.utcnow(),
+            generated_at=datetime.now(UTC),
         )
 
     except Exception as ex:
