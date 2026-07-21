@@ -1,43 +1,32 @@
 """
-Agent Registry
-
-Maintains the available executable agents.
+Agent Registry.
 """
 
-from __future__ import annotations
-
 from agentops.domains.agents.base_agent import BaseAgent
-from agentops.domains.agents.implementations.company_agent import CompanyAgent
-from agentops.domains.agents.implementations.finance_agent import FinanceAgent
-from agentops.domains.agents.implementations.research_agent import ResearchAgent
+from agentops.domains.agents.executive_agent import ExecutiveAgent
+from agentops.domains.agents.planner import AgentType
 
 
 class AgentRegistry:
     """
-    Registry of executable agents.
+    Registry of available AI workers.
     """
 
     def __init__(self) -> None:
-        self._agents: dict[str, BaseAgent] = {}
+        self._agents: dict[AgentType, BaseAgent] = {
+            AgentType.RESEARCH: ExecutiveAgent(),
+            AgentType.EXECUTIVE: ExecutiveAgent(),
+            AgentType.PROPOSAL: ExecutiveAgent(),
+            AgentType.FINANCE: ExecutiveAgent(),
+            AgentType.SALES: ExecutiveAgent(),
+            AgentType.GENERAL: ExecutiveAgent(),
+        }
 
-    def register(self, agent: BaseAgent) -> None:
-        self._agents[agent.service_name] = agent
-
-    def register_defaults(self) -> None:
+    def get(
+        self,
+        agent_type: AgentType,
+    ) -> BaseAgent:
         """
-        Register all built-in agents.
+        Return an agent instance.
         """
-
-        self.register(CompanyAgent())
-        self.register(FinanceAgent())
-        self.register(ResearchAgent())
-
-    def get(self, service_name: str) -> BaseAgent:
-        try:
-            return self._agents[service_name]
-        except KeyError as exc:
-            raise ValueError(f"No agent registered for '{service_name}'.") from exc
-
-    @property
-    def services(self) -> list[str]:
-        return sorted(self._agents.keys())
+        return self._agents[agent_type]

@@ -1,36 +1,23 @@
 """
-Base Agent
-
-Defines the contract implemented by every executable agent.
+Base interface for AI workers.
 """
 
-from __future__ import annotations
-
 from abc import ABC, abstractmethod
-from typing import Any
 
-from agentops.domains.agents.execution_context import ExecutionContext
-from agentops.domains.agents.task import AgentTask
+from agentops.domains.agents.agent_result import AgentResult
 
 
 class BaseAgent(ABC):
     """
-    Base class for all executable agents.
+    Base class for all AI workers.
     """
-
-    @property
-    @abstractmethod
-    def service_name(self) -> str:
-        """
-        Name used by the planner.
-        """
 
     @abstractmethod
     def execute(
         self,
-        task: AgentTask,
-        context: ExecutionContext,
-    ) -> Any:
+        message: str,
+    ) -> AgentResult:
         """
-        Execute a task and return a domain object.
+        Execute a task.
         """
+        raise NotImplementedError

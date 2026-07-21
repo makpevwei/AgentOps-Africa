@@ -9,7 +9,7 @@ from __future__ import annotations
 from agentops.core.logger import logger
 from agentops.domains.agents.execution_context import ExecutionContext
 from agentops.domains.agents.execution_plan import ExecutionPlan
-from agentops.domains.agents.registry import AgentRegistry
+from agentops.domains.agents.service_registry import ServiceRegistry
 from agentops.domains.agents.task_result import TaskResult
 
 
@@ -19,8 +19,8 @@ class Executor:
     """
 
     def __init__(self) -> None:
-        self.registry = AgentRegistry()
-        self.registry.register_defaults()
+        self.registry = ServiceRegistry()
+        
 
     def execute(
         self,

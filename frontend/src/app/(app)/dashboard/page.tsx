@@ -1,5 +1,6 @@
+import { AssistantChat } from "@/features/assistant/components/assistant-chat";
+
 import {
-  AssistantPrompt,
   PipelineSummary,
   QuickActions,
   RecentActivity,
@@ -8,13 +9,12 @@ import {
 export default function DashboardPage() {
   return (
     <div className="space-y-8">
-      <AssistantPrompt />
+      <AssistantChat />
 
       <QuickActions />
 
       <div className="grid gap-6 lg:grid-cols-2">
         <RecentActivity />
-
         <PipelineSummary />
       </div>
     </div>

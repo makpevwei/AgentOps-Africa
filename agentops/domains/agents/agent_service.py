@@ -5,42 +5,38 @@ Coordinates AI interactions.
 """
 
 from agentops.core.logger import logger
-from agentops.domains.research.analysis_models import CompanyAnalysis
-from agentops.domains.research.analyzers.executive_analyzer import (
-    ExecutiveAnalyzer,
-)
-from agentops.domains.research.research_engine import ResearchEngine
+from agentops.domains.agents.agent_result import AgentResult
+from agentops.domains.agents.planner import Planner
+from agentops.domains.agents.registry import AgentRegistry
 
 
 class AgentService:
     """
-    Service responsible for coordinating AI-powered company analysis.
+    Coordinates AI workers.
     """
 
     def __init__(
         self,
-        research_engine: ResearchEngine | None = None,
+        planner: Planner | None = None,
+        registry: AgentRegistry | None = None,
     ) -> None:
-        self.research_engine = research_engine or ResearchEngine()
-        self.executive = ExecutiveAnalyzer()
+        self.planner = planner or Planner()
+        self.registry = registry or AgentRegistry()
 
     def chat(
         self,
         message: str,
-    ) -> CompanyAnalysis:
-        """
-        Analyze a company based on the user's message.
-        """
-
+    ) -> AgentResult:
         logger.info("Processing chat request: %s", message)
 
-        context = self.research_engine.build_context(message)
+        agent_type = self.planner.decide(message)
 
-        analysis = self.executive.analyze(context)
+        logger.info("Planner selected agent: %s", agent_type)
 
-        logger.info(
-            "Completed analysis for %s",
-            analysis.company_name,
-        )
+        agent = self.registry.get(agent_type)
 
-        return analysis
+        result = agent.execute(message)
+
+        logger.info("Agent completed successfully.")
+
+        return result
