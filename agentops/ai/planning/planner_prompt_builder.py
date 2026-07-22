@@ -41,10 +41,24 @@ class PlannerPromptBuilder(BasePromptBuilder[str]):
         {
         "tasks": [
             {
+            "id": 1,
+            "name": "Resolve Company",
             "service": "company",
             "action": "resolve_company",
-            "description": "Identify the company",
+            "description": "Resolve company information",
+            "payload": {
+                "query": "Microsoft"
+            },
             "depends_on": []
+            },
+            {
+            "id": 2,
+            "name": "Research Company",
+            "service": "research",
+            "action": "company_profile",
+            "description": "Research company",
+            "payload": {},
+            "depends_on": [1]
             }
         ]
         }
