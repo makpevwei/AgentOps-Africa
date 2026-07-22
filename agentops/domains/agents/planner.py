@@ -6,10 +6,7 @@ Coordinates AI planning and deterministic workflow creation.
 
 import logging
 
-from agentops.ai.planning import (
-    AIPlanner,
-    WorkflowConverter,
-)
+from agentops.ai.planning import PlanningPipeline
 from agentops.config import settings
 from agentops.domains.agents.execution_plan import ExecutionPlan
 from agentops.domains.agents.intent_router import IntentRouter
@@ -20,35 +17,30 @@ logger = logging.getLogger(__name__)
 
 
 class Planner:
+    """
+    Coordinates workflow planning.
 
-    def __init__(self):
+    Uses the AI planning pipeline when enabled and falls back to the
+    deterministic workflow factory if AI planning fails.
+    """
 
+    def __init__(self) -> None:
         self.router = IntentRouter()
-
         self.factory = WorkflowFactory()
+        self.pipeline = PlanningPipeline()
 
-        self.ai = AIPlanner()
-
-        self.converter = WorkflowConverter()
-
-    def create_workflow(
-        self,
-        message: str,
-    ):
+    def create_workflow(self, message: str):
+        """
+        Create a workflow for the given user request.
+        """
 
         if settings.USE_AI_PLANNER:
-
             try:
+                return self.pipeline.plan(message)
 
-                workflow_plan = self.ai.plan(message)
-
-                return self.converter.convert(workflow_plan)
-
-            except Exception as exc:
-
+            except Exception:
                 logger.exception(
-                    "AI planner failed. Falling back to WorkflowFactory.",
-                    exc_info=exc,
+                    "AI planning failed. Falling back to deterministic planner."
                 )
 
         intent = self.router.decide(message)
@@ -62,13 +54,15 @@ class Planner:
         self,
         message: str,
     ) -> ExecutionPlan:
+        """
+        Convert a workflow into an executable plan.
+        """
 
         workflow = self.create_workflow(message)
 
         plan = ExecutionPlan(goal=message)
 
         for step in workflow.steps:
-
             plan.add_task(
                 AgentTask(
                     id=step.id,
