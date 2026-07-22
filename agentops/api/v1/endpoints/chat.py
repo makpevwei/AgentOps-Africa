@@ -28,13 +28,19 @@ async def chat(
     request: ChatRequest,
 ) -> ChatResponse:
     """
-    Process a user message and return an AI-generated response.
+    Process a user message using the AgentOps workflow runtime.
     """
+
     try:
         response = service.chat(request.message)
 
         return ChatResponse(
-            response=response,
+            workflow_id="temp",
+            workflow_name="Workflow",
+            planner="runtime",
+            status="completed",
+            message=response.message,
+            result=response.data,
         )
 
     except Exception as ex:
