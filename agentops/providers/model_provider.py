@@ -22,8 +22,8 @@ from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain_groq import ChatGroq
 from langchain_openai import ChatOpenAI
 
+from agentops.config import settings
 from agentops.config.providers import LLMProvider
-from agentops.config.settings import settings
 from agentops.core.exceptions import ProviderError
 from agentops.core.logger import logger
 

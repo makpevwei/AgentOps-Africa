@@ -1,4 +1,4 @@
-from agentops.config.settings import settings
+from agentops.config import settings
 from agentops.core.logger import logger
 from agentops.core.model_provider import ChatModelProvider
 

@@ -5,7 +5,7 @@ from typing import Any
 
 from jose import JWTError, jwt
 
-from agentops.config.settings import settings
+from agentops.config import settings
 
 
 def _create_token(

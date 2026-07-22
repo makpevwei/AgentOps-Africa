@@ -1,167 +1,86 @@
-from pathlib import Path
+"""
+Application Settings
 
-from pydantic import Field
+Central configuration for the AgentOps platform.
+"""
+
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
-# ==============================================================================
-# PROJECT ROOT
-# ==============================================================================
-
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
-
-
-# ==============================================================================
-# APPLICATION SETTINGS
-# ==============================================================================
 
 
 class Settings(BaseSettings):
-    """
-    Global application settings.
-
-    All configuration values are loaded from the .env file.
-    """
-
-    # ==========================================================================
-    # APPLICATION
-    # ==========================================================================
+    # ------------------------------------------------------------------
+    # Application
+    # ------------------------------------------------------------------
 
     APP_NAME: str = "AgentOps Africa"
-
-    APP_VERSION: str = "0.1.0"
-
     ENVIRONMENT: str = "development"
-
     DEBUG: bool = True
 
-    LOG_LEVEL: str = "INFO"
+    # ------------------------------------------------------------------
+    # Database
+    # ------------------------------------------------------------------
 
-    # ==========================================================================
-    # LLM CONFIGURATION
-    # ==========================================================================
+    DATABASE_URL: str = "sqlite:///./agentops.db"
 
-    # LLM_PROVIDER: str = Field(default="groq")
+    # ------------------------------------------------------------------
+    # JWT
+    # ------------------------------------------------------------------
 
-    LLM_PROVIDER: str = Field(default="openai")
+    JWT_SECRET_KEY: str = "change-this-secret"
+    JWT_ALGORITHM: str = "HS256"
 
-    OPENAI_MODEL: str = Field(default="gpt-4o-mini")
+    ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
-    GROQ_MODEL: str = Field(default="llama-3.3-70b-versatile")
+    # ------------------------------------------------------------------
+    # LLM Provider
+    # ------------------------------------------------------------------
 
-    GEMINI_MODEL: str = Field(default="gemini-2.5-pro")
+    LLM_PROVIDER: str = "openai"
 
-    OPENROUTER_MODEL: str = Field(default="openai/gpt-4.1")
+    DEFAULT_MODEL: str = "gpt-5.5"
 
-    TEMPERATURE: float = Field(default=0.0)
+    OPENAI_MODEL: str = "gpt-5.5"
+    GEMINI_MODEL: str = "gemini-2.5-pro"
+    GROQ_MODEL: str = "llama-3.3-70b-versatile"
+    OPENROUTER_MODEL: str = "openai/gpt-5.5"
 
-    MAX_TOKENS: int = Field(default=4096)
-
-    STREAMING: bool = Field(default=True)
-
-    REQUEST_TIMEOUT: int = Field(default=120)
-
-    # ==========================================================================
-    # AI PROVIDER API KEYS
-    # ==========================================================================
+    # ------------------------------------------------------------------
+    # API Keys
+    # ------------------------------------------------------------------
 
     OPENAI_API_KEY: str | None = None
-
-    GOOGLE_API_KEY: str | None = None
-
-    GROQ_API_KEY: str | None = None
-
     OPENROUTER_API_KEY: str | None = None
-
-    NVIDIA_API_KEY: str | None = None
-
     OPENROUTER_BASE_URL: str = "https://openrouter.ai/api/v1"
-
-    # ==========================================================================
-    # RESEARCH & SEARCH
-    # ==========================================================================
 
     TAVILY_API_KEY: str | None = None
 
-    GOOGLE_CSE_ID: str | None = None
+    # ------------------------------------------------------------------
+    # Model Behaviour
+    # ------------------------------------------------------------------
 
-    GOOGLE_CSE_API_KEY: str | None = None
+    TEMPERATURE: float = 0.1
+    REQUEST_TIMEOUT: int = 120
+    STREAMING: bool = False
 
-    NEWSAPI_API_KEY: str | None = None
+    # ------------------------------------------------------------------
+    # Feature Flags
+    # ------------------------------------------------------------------
 
-    WIKIPEDIA_LANGUAGE: str = "en"
+    USE_AI_PLANNER: bool = False
 
-    # ==========================================================================
-    # FINANCE
-    # ==========================================================================
-
-    ALPHA_VANTAGE_API_KEY: str | None = None
-
-    FINNHUB_API_KEY: str | None = None
-
-    EXCHANGE_RATE_API_KEY: str | None = None
-
-    # ==========================================================================
-    # GOOGLE WORKSPACE
-    # ==========================================================================
-
-    GOOGLE_CREDENTIALS_FILE: str = "credentials.json"
-
-    # ==========================================================================
-    # TELEGRAM
-    # ==========================================================================
-
-    TELEGRAM_BOT_TOKEN: str | None = None
-
-    TELEGRAM_CHAT_ID: str | None = None
-
-    # ==========================================================================
-    # WEATHER
-    # ==========================================================================
-
-    OPENWEATHER_API_KEY: str | None = None
-
-    # ==========================================================================
-    # LANGSMITH
-    # ==========================================================================
-
-    LANGSMITH_API_KEY: str | None = None
-
-    LANGSMITH_TRACING: bool = True
-
-    LANGSMITH_PROJECT: str = "AgentOps-Africa"
-
-    DATABASE_URL: str
-
-    JWT_SECRET_KEY: str
-
-    JWT_ALGORITHM: str = "HS256"
-
-    ACCESS_TOKEN_EXPIRE_MINUTES: int = 60
-
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
-
-    # ==========================================================================
-    # REPORTING
-    # ==========================================================================
-
-    REPORT_OUTPUT_DIR: str = "reports"
-
-    DEFAULT_REPORT_FORMAT: str = "markdown"
-
-    # ==========================================================================
-    # PYDANTIC SETTINGS
-    # ==========================================================================
+    @property
+    def use_ai_planner(self) -> bool:
+        """
+        Backward compatibility while the codebase migrates.
+        """
+        return self.USE_AI_PLANNER
 
     model_config = SettingsConfigDict(
-        env_file=BASE_DIR / ".env",
-        env_file_encoding="utf-8",
+        env_file=".env",
         case_sensitive=True,
         extra="ignore",
     )
 
-
-# ==============================================================================
-# GLOBAL SETTINGS INSTANCE
-# ==============================================================================
 
 settings = Settings()

@@ -1,32 +1,55 @@
 """
 Workflow Planner
 
-Coordinates intent detection and workflow creation.
+Coordinates AI planning and deterministic workflow creation.
 """
 
+import logging
+
+from agentops.ai.planning import (
+    AIPlanner,
+    WorkflowConverter,
+)
+from agentops.config import settings
 from agentops.domains.agents.execution_plan import ExecutionPlan
 from agentops.domains.agents.intent_router import IntentRouter
 from agentops.domains.agents.task import AgentTask
 from agentops.domains.agents.workflow_factory import WorkflowFactory
 
+logger = logging.getLogger(__name__)
+
 
 class Planner:
-    """
-    High-level workflow planner.
-
-    Responsible for orchestrating the planning process,
-    not implementing planning logic.
-    """
 
     def __init__(self):
 
         self.router = IntentRouter()
+
         self.factory = WorkflowFactory()
+
+        self.ai = AIPlanner()
+
+        self.converter = WorkflowConverter()
 
     def create_workflow(
         self,
         message: str,
     ):
+
+        if settings.USE_AI_PLANNER:
+
+            try:
+
+                workflow_plan = self.ai.plan(message)
+
+                return self.converter.convert(workflow_plan)
+
+            except Exception as exc:
+
+                logger.exception(
+                    "AI planner failed. Falling back to WorkflowFactory.",
+                    exc_info=exc,
+                )
 
         intent = self.router.decide(message)
 
@@ -39,15 +62,13 @@ class Planner:
         self,
         message: str,
     ) -> ExecutionPlan:
-        """
-        Backward compatibility for legacy callers.
-        """
 
         workflow = self.create_workflow(message)
 
         plan = ExecutionPlan(goal=message)
 
         for step in workflow.steps:
+
             plan.add_task(
                 AgentTask(
                     id=step.id,
