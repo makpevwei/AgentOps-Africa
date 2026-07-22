@@ -35,10 +35,10 @@ async def chat(
         response = service.chat(request.message)
 
         return ChatResponse(
-            workflow_id="temp",
-            workflow_name="Workflow",
-            planner="runtime",
-            status="completed",
+            workflow_id=response.workflow_id,
+            workflow_name=response.workflow_name,
+            planner=response.planner,
+            status=response.status,
             message=response.message,
             result=response.data,
         )

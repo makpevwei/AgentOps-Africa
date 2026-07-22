@@ -4,8 +4,13 @@ Agent Service
 Coordinates AI interactions using the Workflow Runtime.
 """
 
+from uuid import uuid4
+
+from agentops.config import settings
 from agentops.core.logger import logger
-from agentops.domains.agents.agent_result import AgentResult
+from agentops.domains.agents.agent_execution_result import (
+    AgentExecutionResult,
+)
 from agentops.domains.agents.planner import Planner
 from agentops.domains.workflows.workflow_executor import WorkflowExecutor
 
@@ -26,7 +31,7 @@ class AgentService:
     def chat(
         self,
         message: str,
-    ) -> AgentResult:
+    ) -> AgentExecutionResult:
 
         logger.info("Processing chat request: %s", message)
 
@@ -44,11 +49,15 @@ class AgentService:
 
         logger.info("Workflow completed successfully.")
 
-        #
-        # Temporary compatibility adapter
-        #
-        return AgentResult(
-            agent="workflow",
+        return AgentExecutionResult(
+            workflow_id=f"wf_{uuid4().hex[:8]}",
+            workflow_name=workflow.name,
+            planner=(
+                "ai"
+                if settings.USE_AI_PLANNER
+                else "deterministic"
+            ),
+            status="completed",
             message="Workflow completed successfully.",
             data=context,
         )
