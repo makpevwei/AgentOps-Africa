@@ -4,21 +4,14 @@ Workflow Planner
 Determines the user's intent and builds the appropriate workflow.
 """
 
-from enum import StrEnum
-
 from agentops.domains.agents.execution_plan import ExecutionPlan
+from agentops.domains.agents.intent_router import (
+    AgentType,
+    IntentRouter,
+)
 from agentops.domains.agents.task import AgentTask
 from agentops.domains.workflows.workflow import Workflow
 from agentops.domains.workflows.workflow_step import WorkflowStep
-
-
-class AgentType(StrEnum):
-    RESEARCH = "research"
-    PROPOSAL = "proposal"
-    FINANCE = "finance"
-    EXECUTIVE = "executive"
-    SALES = "sales"
-    GENERAL = "general"
 
 
 class Planner:
@@ -27,47 +20,9 @@ class Planner:
     required to satisfy the request.
     """
 
-    def decide(
-        self,
-        message: str,
-    ) -> AgentType:
+    def __init__(self):
 
-        message = message.lower()
-
-        if any(
-            word in message
-            for word in [
-                "research",
-                "analyse",
-                "analyze",
-                "company",
-                "competitor",
-            ]
-        ):
-            return AgentType.RESEARCH
-
-        if any(
-            word in message
-            for word in [
-                "proposal",
-                "quotation",
-                "rfp",
-            ]
-        ):
-            return AgentType.PROPOSAL
-
-        if any(
-            word in message
-            for word in [
-                "invoice",
-                "finance",
-                "cash",
-                "budget",
-            ]
-        ):
-            return AgentType.FINANCE
-
-        return AgentType.GENERAL
+        self.router = IntentRouter()
 
     # ----------------------------------------------------
     # Workflow Creation
@@ -81,7 +36,7 @@ class Planner:
         Build a workflow based on the detected intent.
         """
 
-        intent = self.decide(message)
+        intent = self.router.decide(message)
 
         if intent == AgentType.RESEARCH:
             return self._research_workflow(message)
