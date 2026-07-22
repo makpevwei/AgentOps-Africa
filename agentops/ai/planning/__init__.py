@@ -1,4 +1,5 @@
 from .ai_planner import AIPlanner
+from .planning_pipeline import PlanningPipeline
 from .workflow_converter import WorkflowConverter
 from .workflow_validator import (
     WorkflowValidationError,
@@ -10,4 +11,5 @@ __all__ = [
     "WorkflowConverter",
     "WorkflowValidator",
     "WorkflowValidationError",
+    "PlanningPipeline",
 ]
