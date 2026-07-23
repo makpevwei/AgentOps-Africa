@@ -5,29 +5,45 @@ Executes research tasks.
 """
 
 from agentops.core.logger import logger
+from agentops.tools.research.tavily_tool import TavilyResearchTool
 
 
 class ResearchExecutor:
     """
     Executes research tasks.
 
-    This class is intentionally lightweight.
-
-    Future versions will:
-
-    - Execute Tavily
-    - Execute Wikipedia
-    - Execute SEC
-    - Execute Finnhub
-    - Execute MCP tools
-
-    and merge the results.
+    Responsible for calling the appropriate
+    research tool for each task.
     """
 
+    def __init__(self):
+
+        self.tavily = TavilyResearchTool()
+
     def execute(self, tasks):
+
         logger.info(
             "Executing %d research task(s)...",
             len(tasks),
         )
 
-        return tasks
+        findings = []
+
+        for task in tasks:
+
+            logger.info("Running task: %s", task.title)
+
+            if task.tool == "tavily":
+
+                findings.extend(
+                    self.tavily.search(
+                        task.query or task.description
+                    )
+                )
+
+        logger.info(
+            "Collected %d research finding(s).",
+            len(findings),
+        )
+
+        return findings

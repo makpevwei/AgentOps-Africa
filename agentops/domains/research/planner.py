@@ -14,13 +14,10 @@ class ResearchTask:
     """
 
     id: int
-
     title: str
-
     description: str
-
+    query: str | None = None
     tool: str | None = None
-
     completed: bool = False
 
 
@@ -50,27 +47,30 @@ class ResearchPlanner:
             tasks.extend(
                 [
                     ResearchTask(
-                        1,
-                        "Resolve Company",
-                        "Determine the correct company identity.",
-                        "company_resolver",
+                        id=1,
+                        title="Resolve Company",
+                        description="Determine the correct company identity.",
+                        query=query,
+                        tool="company_resolver",
                     ),
                     ResearchTask(
-                        2,
-                        "Search Latest News",
-                        "Collect recent news articles.",
-                        "tavily",
+                        id=2,
+                        title="Search Latest News",
+                        description="Collect recent news articles.",
+                        query=query,
+                        tool="tavily",
                     ),
                     ResearchTask(
-                        3,
-                        "Search Background Information",
-                        "Collect background information.",
-                        "wikipedia",
+                        id=3,
+                        title="Search Background Information",
+                        description="Collect background information.",
+                        query=query,
+                        tool="wikipedia",
                     ),
                     ResearchTask(
-                        4,
-                        "Generate Investment Report",
-                        "Summarize all findings.",
+                        id=4,
+                        title="Generate Investment Report",
+                        description="Summarize all findings.",
                     ),
                 ]
             )
@@ -82,21 +82,23 @@ class ResearchPlanner:
         tasks.extend(
             [
                 ResearchTask(
-                    1,
-                    "Search the Web",
-                    "Search recent information.",
-                    "tavily",
+                    id=1,
+                    title="Search the Web",
+                    description="Search recent information.",
+                    query=query,
+                    tool="tavily",
                 ),
                 ResearchTask(
-                    2,
-                    "Search Background Knowledge",
-                    "Gather encyclopedia information.",
-                    "wikipedia",
+                    id=2,
+                    title="Search Background Knowledge",
+                    description="Gather encyclopedia information.",
+                    query=query,
+                    tool="wikipedia",
                 ),
                 ResearchTask(
-                    3,
-                    "Generate Report",
-                    "Create a structured report.",
+                    id=3,
+                    title="Generate Report",
+                    description="Create a structured report.",
                 ),
             ]
         )

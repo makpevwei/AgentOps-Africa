@@ -10,6 +10,13 @@ PROMPT = (
 
 
 class ResearchAgent:
+    """
+    Enterprise Research Agent.
+
+    Uses the Research Engine to gather
+    information before asking the LLM
+    to generate a final response.
+    """
 
     def __init__(self):
 
@@ -25,21 +32,43 @@ class ResearchAgent:
             name="ResearchAgent",
         )
 
-    async def ask(self, question: str):
+    async def ask(
+        self,
+        question: str,
+    ):
 
-        plan = self.engine.create_plan(question)
+        findings = self.engine.research(question)
+
+        research_context = "\n\n".join(
+            f"""Title:
+{item.title}
+
+Summary:
+{item.summary}
+
+URL:
+{item.url}
+"""
+            for item in findings
+        )
+
+        content = f"""
+Question:
+
+{question}
+
+Research Findings:
+
+{research_context}
+"""
 
         return await self.agent.ainvoke(
             {
                 "messages": [
                     {
                         "role": "user",
-                        "content": question,
+                        "content": content,
                     }
-                ],
-                "research_plan": [
-                    task.__dict__
-                    for task in plan
-                ],
+                ]
             }
         )
