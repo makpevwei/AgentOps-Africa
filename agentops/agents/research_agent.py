@@ -12,10 +12,6 @@ PROMPT = (
 class ResearchAgent:
     """
     Enterprise Research Agent.
-
-    Uses the Research Engine to gather
-    information before asking the LLM
-    to generate a final response.
     """
 
     def __init__(self):
@@ -37,19 +33,20 @@ class ResearchAgent:
         question: str,
     ):
 
-        findings = self.engine.research(question)
+        report = self.engine.research(question)
 
         research_context = "\n\n".join(
-            f"""Title:
-{item.title}
+            f"""
+Title:
+{finding.title}
 
 Summary:
-{item.summary}
+{finding.summary}
 
 URL:
-{item.url}
+{finding.url}
 """
-            for item in findings
+            for finding in report.findings
         )
 
         content = f"""

@@ -1,50 +1,64 @@
 """
 Research Domain Models
-
-These models define the business objects used by the
-Research Engine.
-
-Nothing here depends on LangChain, DeepAgents,
-OpenAI, Tavily, or any external API.
 """
 
-from datetime import datetime
-from typing import Any
-
-from pydantic import BaseModel, Field
+from dataclasses import dataclass, field
+from datetime import UTC, datetime
 
 
-class ResearchResult(BaseModel):
+@dataclass
+class ResearchSource:
     """
-    Represents ONE research finding from a source.
+    Represents a research source.
     """
-
-    source: str
 
     title: str
+    url: str
+    provider: str
 
-    summary: str
-
-    url: str | None = None
-
-    confidence: float = Field(default=1.0, ge=0, le=1)
-
-    metadata: dict[str, Any] = Field(default_factory=dict)
-
-
-class ResearchReport(BaseModel):
+@dataclass
+class ResearchResult:
     """
-    Final research report produced by the engine.
+    Legacy research result.
+
+    Maintained for backward compatibility while
+    the codebase migrates to ResearchReport.
+    """
+
+    title: str
+    summary: str
+    url: str
+    confidence: float = 0.0
+
+@dataclass
+class ResearchFinding:
+    """
+    Represents one research finding.
+    """
+
+    title: str
+    summary: str
+    url: str
+    confidence: float = 0.0
+
+
+@dataclass
+class ResearchReport:
+    """
+    Final research report returned by the
+    Research Engine.
     """
 
     query: str
 
-    created_at: datetime = Field(default_factory=datetime.utcnow)
+    findings: list[ResearchFinding] = field(default_factory=list)
+
+    sources: list[ResearchSource] = field(default_factory=list)
 
     summary: str = ""
 
-    findings: list[ResearchResult] = Field(default_factory=list)
+    generated_at: datetime = field(
+        default_factory=lambda: datetime.now(UTC)
+    )
 
-    recommendations: list[str] = Field(default_factory=list)
-
-    confidence: float = 0.0
+    execution_time_ms: int = 0
