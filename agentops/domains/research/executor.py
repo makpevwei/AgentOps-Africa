@@ -1,42 +1,33 @@
 """
-Research Task Executor
+Research Executor
 
-Executes a research plan using the available tools.
+Executes research tasks.
 """
+
+from agentops.core.logger import logger
 
 
 class ResearchExecutor:
-    def __init__(self):
+    """
+    Executes research tasks.
 
-        self.tools = {}
+    This class is intentionally lightweight.
 
-    def register_tool(
-        self,
-        name,
-        tool,
-    ):
+    Future versions will:
 
-        self.tools[name] = tool
+    - Execute Tavily
+    - Execute Wikipedia
+    - Execute SEC
+    - Execute Finnhub
+    - Execute MCP tools
+
+    and merge the results.
+    """
 
     def execute(self, tasks):
-
-        for task in tasks:
-            print()
-
-            print(f"Executing: {task.title}")
-
-            if task.tool is None:
-                task.completed = True
-
-                continue
-
-            if task.tool not in self.tools:
-                print(f"No tool registered for {task.tool}")
-
-                continue
-
-            print(f"Using tool -> {task.tool}")
-
-            task.completed = True
+        logger.info(
+            "Executing %d research task(s)...",
+            len(tasks),
+        )
 
         return tasks

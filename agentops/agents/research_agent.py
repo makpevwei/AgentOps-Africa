@@ -1,6 +1,7 @@
 from pathlib import Path
 
 from agentops.builders.agent_builder import AgentBuilder
+from agentops.domains.research.engine import ResearchEngine
 from agentops.tools.research.langchain_tools import tavily_search
 
 PROMPT = (
@@ -9,7 +10,10 @@ PROMPT = (
 
 
 class ResearchAgent:
+
     def __init__(self):
+
+        self.engine = ResearchEngine()
 
         self.tools = [
             tavily_search,
@@ -23,6 +27,8 @@ class ResearchAgent:
 
     async def ask(self, question: str):
 
+        plan = self.engine.create_plan(question)
+
         return await self.agent.ainvoke(
             {
                 "messages": [
@@ -30,6 +36,10 @@ class ResearchAgent:
                         "role": "user",
                         "content": question,
                     }
-                ]
+                ],
+                "research_plan": [
+                    task.__dict__
+                    for task in plan
+                ],
             }
         )
