@@ -5,22 +5,24 @@ Executes research tasks.
 """
 
 from agentops.core.logger import logger
-from agentops.tools.research.tavily_tool import TavilyResearchTool
+from agentops.domains.research.tool_registry import (
+    ResearchToolRegistry,
+)
 
 
 class ResearchExecutor:
     """
     Executes research tasks.
-
-    Responsible for calling the appropriate
-    research tool for each task.
     """
 
     def __init__(self):
 
-        self.tavily = TavilyResearchTool()
+        self.registry = ResearchToolRegistry()
 
-    def execute(self, tasks):
+    def execute(
+        self,
+        tasks,
+    ):
 
         logger.info(
             "Executing %d research task(s)...",
@@ -33,13 +35,25 @@ class ResearchExecutor:
 
             logger.info("Running task: %s", task.title)
 
-            if task.tool == "tavily":
+            if not task.tool:
+                continue
 
-                findings.extend(
-                    self.tavily.search(
-                        task.query or task.description
-                    )
+            tool = self.registry.get(task.tool)
+
+            if tool is None:
+
+                logger.warning(
+                    "No registered tool for '%s'",
+                    task.tool,
                 )
+
+                continue
+
+            results = tool.search(
+                task.query or task.description
+            )
+
+            findings.extend(results)
 
         logger.info(
             "Collected %d research finding(s).",
